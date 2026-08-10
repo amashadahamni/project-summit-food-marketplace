@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Summit � Food Marketplace</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:linear-gradient(180deg,#f8fbff 0%,#edf2ff 45%,#f8fafc 100%);color:#0f172a;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{text-decoration:none;color:inherit}
+    .page{max-width:1360px;margin:0 auto;padding:24px}
+    .hero-panel{position:relative;background:#fff;border-radius:36px;overflow:hidden;padding:32px;box-shadow:0 40px 100px rgba(15,23,42,.09);border:1px solid rgba(148,163,184,.16);margin-top:24px}
+    .hero-panel::before{content:"";position:absolute;top:-80px;right:-80px;width:260px;height:260px;background:rgba(59,130,246,.1);border-radius:50%;filter:blur(16px)}
+    .header-bar{display:flex;justify-content:space-between;align-items:center;gap:18px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,#2563eb,#0ea5e9);font-weight:800;font-size:22px}
+    .brand-text{display:flex;flex-direction:column;gap:4px}
+    .brand-text small{color:#64748b;letter-spacing:.12em;text-transform:uppercase;font-size:11px}
+    .brand-text h1{margin:0;font-size:1.15rem;font-weight:800}
+    .nav-links{display:flex;gap:22px;font-weight:600;color:#475569}
+    .nav-links a{padding:8px 12px;border-radius:999px;transition:background .2s,color .2s}
+    .nav-links a.active,.nav-links a:hover{background:rgba(59,130,246,.12);color:#1d4ed8}
+    .sign-in{display:inline-flex;align-items:center;gap:10px;background:#0f172a;color:#fff;padding:12px 18px;border-radius:999px;font-weight:700;transition:opacity .2s}
+    .sign-in:hover{opacity:.85}
+    .hero-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:28px;margin-top:34px;align-items:center}
+    .hero-copy{display:grid;gap:22px}
+    .eyebrow{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:999px;background:rgba(59,130,246,.12);color:#0f172a;font-weight:700;font-size:12px;letter-spacing:.12em;text-transform:uppercase;width:fit-content}
+    .hero-copy h2{margin:0;font-size:clamp(2.5rem,4vw,4.5rem);line-height:.95;max-width:680px}
+    .hero-copy p{margin:0;max-width:680px;color:#475569;line-height:1.8;font-size:1rem}
+    .feature-list{display:grid;gap:18px;grid-template-columns:repeat(3,minmax(0,1fr))}
+    .feature-card{background:#fff;border-radius:28px;padding:24px;box-shadow:0 22px 50px rgba(15,23,42,.06);border:1px solid rgba(148,163,184,.14);display:block;cursor:pointer;transition:box-shadow .2s,transform .15s}
+    .feature-card:hover{box-shadow:0 28px 60px rgba(37,99,235,.12);transform:translateY(-2px)}
+    .feature-card h3{margin:0 0 10px;font-size:1rem;color:#0f172a}
+    .feature-card p{margin:0;color:#475569;line-height:1.7}
+    .hero-visual{position:relative;min-height:420px;background:linear-gradient(180deg,rgba(59,130,246,.08),rgba(236,248,255,.2));border-radius:36px;padding:28px;overflow:hidden;display:grid;align-items:flex-end;justify-items:center}
+    .hero-visual::before,.hero-visual::after{content:"";position:absolute;border-radius:50%;filter:blur(30px);opacity:.7}
+    .hero-visual::before{top:-70px;left:-60px;width:220px;height:220px;background:rgba(59,130,246,.18)}
+    .hero-visual::after{bottom:-60px;right:-40px;width:220px;height:220px;background:rgba(16,185,129,.16)}
+    .hero-card{width:100%;max-width:540px;background:#fff;border-radius:36px;padding:28px;box-shadow:0 18px 50px rgba(15,23,42,.08);border:1px solid rgba(148,163,184,.16);position:relative;z-index:1}
+    .pill{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;background:#eff6ff;color:#0f172a;font-weight:700;font-size:.85rem;margin-bottom:20px}
+    .hero-card h3{margin:0 0 16px;font-size:1.9rem;line-height:1.05}
+    .hero-card p{margin:0;color:#475569;line-height:1.75;font-size:.98rem}
+    .stats-row{display:grid;gap:16px;margin-top:28px;grid-template-columns:repeat(3,minmax(0,1fr))}
+    .stat{background:#f8fafc;border-radius:24px;padding:18px 16px;border:1px solid rgba(148,163,184,.14)}
+    .stat h4{margin:0 0 6px;font-size:.8rem;color:#64748b;letter-spacing:.1em;text-transform:uppercase}
+    .stat p{margin:0;font-size:1.4rem;font-weight:700;color:#0f172a}
+    @media(max-width:1080px){.hero-grid{grid-template-columns:1fr}}
+    @media(max-width:720px){.page{padding:18px}.header-bar{flex-direction:column;align-items:stretch}.nav-links{justify-content:center;flex-wrap:wrap}.hero-panel{padding:24px}.hero-copy h2{font-size:2.4rem}.feature-list{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="hero-panel">
+      <div class="header-bar">
+        <div class="brand">
+          <div class="logo">S</div>
+          <div class="brand-text">
+            <small>Project Summit</small>
+            <h1>Food Marketplace</h1>
+          </div>
+        </div>
+        <div class="nav-links">
+          <a class="active" href="index.html">Home</a>
+          <a href="signin.html">Customer</a>
+          <a href="signin.html">Supplier</a>
+          <a href="signin.html">Data Steward</a>
+        </div>
+        <a class="sign-in" href="signin.html">Sign in</a>
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">Project Summit</div>
+          <h2>Food Marketplace</h2>
+          <p>Connecting customers, suppliers, and data for a smarter food ecosystem. A full-stack marketplace experience built with React microfrontends, a Node.js BFF, Python FastAPI services, PostgreSQL, and AWS Cognito.</p>
+          <div class="feature-list">
+            <a class="feature-card" href="signin.html">
+              <h3>For Customers</h3>
+              <p>Browse approved products, add items to your cart, and shop from a clean grocery-style storefront.</p>
+            </a>
+            <a class="feature-card" href="signin.html">
+              <h3>For Suppliers</h3>
+              <p>Submit new products, manage inventory, and track approval status from your supplier dashboard.</p>
+            </a>
+            <a class="feature-card" href="signin.html">
+              <h3>For Data Stewards</h3>
+              <p>Review pending submissions, approve or reject listings, and keep product quality under control.</p>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-card">
+            <div class="pill">&#x2022; Live Preview</div>
+            <h3>Food Marketplace Dashboard</h3>
+            <p>Customer, supplier, and data steward workflows in one platform � powered by AWS Cognito, FastAPI, and React microfrontends.</p>
+            <div class="stats-row">
+              <div class="stat"><h4>Total Orders</h4><p>1,248</p></div>
+              <div class="stat"><h4>Active Suppliers</h4><p>320</p></div>
+              <div class="stat"><h4>Products</h4><p>5,430</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

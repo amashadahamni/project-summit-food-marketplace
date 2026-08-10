@@ -1,0 +1,12 @@
+{
+  "name": "summit-customer-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-redux": "^8.1.0",
+    "redux": "^4.3.2",
+    "single-spa-react": "^4.0.0"
+  }
+}

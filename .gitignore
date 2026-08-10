@@ -1,0 +1,21 @@
+# Node
+node_modules/
+frontend/**/node_modules/
+frontend/**/build/
+frontend/**/dist/
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+.env
+.env.*
+# Docker
+docker-compose.override.yml
+# VS Code
+.vscode/
+# OS
+.DS_Store
+Thumbs.db

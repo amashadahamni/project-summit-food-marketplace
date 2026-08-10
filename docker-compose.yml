@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: summit_food
+      POSTGRES_USER: summit_user
+      POSTGRES_PASSWORD: summit_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  product-service:
+    build: ./services/product-service
+    environment:
+      DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
+    depends_on:
+      - postgres
+    ports:
+      - "8001:8001"
+
+  cart-service:
+    build: ./services/cart-service
+    environment:
+      DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
+    depends_on:
+      - postgres
+    ports:
+      - "8002:8002"
+
+  approval-service:
+    build: ./services/approval-service
+    environment:
+      DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
+    depends_on:
+      - postgres
+    ports:
+      - "8003:8003"
+
+  bff:
+    build: ./bff
+    environment:
+      PRODUCT_SERVICE_URL: http://product-service:8001
+      CART_SERVICE_URL: http://cart-service:8002
+      APPROVAL_SERVICE_URL: http://approval-service:8003
+    depends_on:
+      - product-service
+      - cart-service
+      - approval-service
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

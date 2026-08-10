@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer - Project Summit</title>
+  <style>
+    :root {
+      color: #0f172a;
+      background: #eef5ff;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.16), transparent 24%), #eef5ff; }
+    .page { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+    .nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .logo { width: 42px; height: 42px; border-radius: 16px; background: linear-gradient(135deg, #2563eb, #0ea5e9); display: grid; place-items: center; color: #fff; font-weight: 700; }
+    .brand-text { display: flex; flex-direction: column; gap: 2px; }
+    .brand-text span { font-size: 13px; color: #334155; }
+    .brand-text h1 { margin: 0; font-size: 20px; font-weight: 800; }
+    .button { display: inline-flex; align-items: center; justify-content: center; padding: 12px 22px; border-radius: 999px; color: #fff; background: #2563eb; text-decoration: none; font-weight: 700; }
+    .hero { background: #fff; border-radius: 32px; padding: 36px; box-shadow: 0 30px 80px rgba(15, 23, 42, 0.08); border: 1px solid rgba(148, 163, 184, 0.18); }
+    .hero h2 { margin: 0 0 14px; font-size: clamp(2rem, 3vw, 3.2rem); line-height: 1.02; }
+    .hero p { max-width: 780px; color: #475569; line-height: 1.8; margin: 0 0 24px; }
+    .stats { display: grid; gap: 20px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 32px; }
+    .card { background: #f8fafc; padding: 24px; border-radius: 26px; border: 1px solid rgba(148, 163, 184, 0.16); }
+    .card h3 { margin: 0 0 8px; font-size: 1rem; color: #0f172a; }
+    .card p { margin: 0; color: #475569; line-height: 1.7; }
+    .details { margin-top: 40px; background: #ffffff; border-radius: 30px; padding: 28px; border: 1px solid rgba(148, 163, 184, 0.14); display: grid; gap: 20px; }
+    .details h3 { margin: 0; font-size: 1.25rem; }
+    .details p { margin: 0; color: #475569; line-height: 1.8; }
+    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 28px; }
+    .footer-links a { color: #2563eb; font-weight: 700; }
+    @media (max-width: 860px) {
+      .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div class="brand-text">
+          <span>Project Summit</span>
+          <h1>Customer View</h1>
+        </div>
+      </div>
+      <a class="button" href="index.html">Back to Home</a>
+    </div>
+
+    <section class="hero">
+      <h2>Customer shopping made simple</h2>
+      <p>Browse approved products by category, search the marketplace by name, and manage one active cart at a time. This screen represents the customer-facing UI direction for the online grocery experience.</p>
+      <div class="stats">
+        <div class="card">
+          <h3>Approved items only</h3>
+          <p>Customers only see products that have passed the supplier approval workflow.</p>
+        </div>
+        <div class="card">
+          <h3>Single active cart</h3>
+          <p>Every customer can add products to one current cart and update or remove items easily.</p>
+        </div>
+        <div class="card">
+          <h3>Product details</h3>
+          <p>Product listings include price, description, stock availability, and supplier metadata.</p>
+        </div>
+      </div>
+
+      <div class="details">
+        <h3>Customer app features</h3>
+        <p>Customers will be able to browse categories such as Meats, Seafood, and Dairy, search products by name, view detailed cards, add approved items to cart, adjust quantities, and complete their shopping in a unified experience.</p>
+        <p>The final implementation will connect to the backend BFF and FastAPI services for live product availability and cart management.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="supplier.html">Supplier view</a>
+        <a href="datasteward.html">Data Steward view</a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
