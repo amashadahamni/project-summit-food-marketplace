@@ -1,19 +1,15 @@
-// AWS Cognito configuration � fill in your real values from the AWS Console
+﻿// Fill in your values then hard-refresh the browser
 window.AUTH_CONFIG = {
-  // e.g. "us-east-1"
-  region: "us-east-1",
+  // ─── Google OAuth ────────────────────────────────────────────────────────
+  // 1. Go to https://console.cloud.google.com/apis/credentials
+  // 2. Create OAuth 2.0 Client ID (type: Web application)
+  // 3. Add  http://localhost:3000  to "Authorised JavaScript origins"
+  // 4. Paste the Client ID below
+  googleClientId: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
 
-  // Your Cognito Hosted UI domain (no https://)
-  // e.g. "summit-marketplace.auth.us-east-1.amazoncognito.com"
+  // ─── AWS Cognito (optional – only needed when deploying to production) ───
   userPoolDomain: "YOUR_COGNITO_DOMAIN",
-
-  // App client ID (from Cognito > App clients)
-  clientId: "YOUR_CLIENT_ID",
-
-  // Where Cognito sends the user back after login
-  // For local dev keep this; set to your deployed URL in production
-  redirectUri: "http://localhost:3000/",
-
-  // OAuth scopes
-  scope: "openid profile email"
+  clientId:       "YOUR_COGNITO_CLIENT_ID",
+  redirectUri:    "http://localhost:3000/",
+  scope:          "openid profile email"
 };

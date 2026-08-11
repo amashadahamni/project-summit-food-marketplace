@@ -161,9 +161,9 @@
         <div class="forgot-row"><a href="#">Forgot password?</a></div>
       </div>
 
-      <button class="btn-primary" id="signinBtn">
+      <button class="btn-primary" id="loginBtn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Sign in
+        Login
       </button>
 
       <div class="sep">or</div>
@@ -184,13 +184,10 @@
     </div>
   </div>
 
+  <!-- Google Identity Services — enables real Google login -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="js/auth-config.js" onerror="window.__configMissing=true"></script>
   <script src="js/auth.js"></script>
-  <script>
-    document.getElementById('togglePwd').addEventListener('click', function () {
-      var inp = document.getElementById('passwordInput');
-      inp.type = inp.type === 'password' ? 'text' : 'password';
-    });
-  </script>
+
 </body>
 </html>
