@@ -1,0 +1,4 @@
+@import "../../shared/auth.css";
+.auth-card { border-top: 5px solid #d97706; }
+#googleBtn { background: #d97706; border-color: #d97706; color: #fff; }
+#googleBtn:hover { background: #b45309; }

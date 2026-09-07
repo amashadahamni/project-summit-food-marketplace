@@ -12,6 +12,7 @@ __pycache__/
 venv/
 .env
 .env.*
+*.db
 # Docker
 docker-compose.override.yml
 # VS Code

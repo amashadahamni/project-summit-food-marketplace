@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create account | Summit Food Marketplace</title>
+  <link rel="stylesheet" href="styles/signup.css">
+</head>
+<body data-auth-mode="signup" data-home-url="../../../app/home.html">
+  <main class="auth-card right">
+    <img class="brand-mark" src="assets/summit-mark.svg" alt="Summit Food Marketplace">
+    <p class="eyebrow">Summit Food Marketplace</p>
+    <h1>Create your account</h1>
+    <p class="intro">Create your account securely with Summit Cognito.</p>
+    <div id="status" role="alert"></div>
+    <button id="googleBtn" type="button">Sign up</button>
+    <p class="switch">Already registered? <a href="../login/login.html">Log in</a></p>
+  </main>
+  <script src="../../../js/auth-config.js"></script>
+  <script src="../../../js/auth.js"></script>
+  <script src="../../../js/cognito-auth.js"></script>
+</body>
+</html>

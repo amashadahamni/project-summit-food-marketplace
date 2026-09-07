@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | Summit Food Marketplace</title>
+  <link rel="stylesheet" href="homeStyles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="home.html">Summit <span>Food Marketplace</span></a>
+    <nav aria-label="Main navigation">
+      <a aria-current="page" href="home.html">Home</a>
+      <a href="../product/products.html">Products</a>
+      <a href="../product/cart.html">Cart</a>
+      <a href="../service/account.html">Account</a>
+    </nav>
+    <div class="auth-actions">
+      <a href="../../frontend/login/login.html">Log in</a>
+      <a class="button" href="../../frontend/signup/signup.html">Sign up</a>
+      <button id="signOutBtn" class="text-button" type="button">Log out</button>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Local food, thoughtfully sourced</p>
+      <h1>Fresh choices for every table.</h1>
+      <p class="intro">Find approved products from trusted local suppliers, then manage your basket in one place.</p>
+      <div class="hero-actions"><a class="button" href="../product/products.html">Browse products</a><a class="plain-link" href="../service/account.html">Your account</a></div>
+    </section>
+    <section class="categories" aria-labelledby="category-title">
+      <div><p class="eyebrow">Browse the market</p><h2 id="category-title">Shop by category</h2></div>
+      <div class="category-grid">
+        <a href="../product/products.html?category=Fruit">Fruit</a>
+        <a href="../product/products.html?category=Vegetables">Vegetables</a>
+        <a href="../product/products.html?category=Meats">Meats</a>
+        <a href="../product/products.html?category=Seafood">Seafood</a>
+        <a href="../product/products.html?category=Dairy">Dairy</a>
+        <a href="../product/products.html?category=Pantry">Pantry</a>
+      </div>
+    </section>
+    <section class="featured" aria-labelledby="featured-title">
+      <div class="section-heading"><div><p class="eyebrow">Marketplace</p><h2 id="featured-title">Approved products</h2></div><a class="plain-link" href="../product/products.html">View all</a></div>
+      <p id="productStatus" class="status">Loading products...</p>
+      <div id="productList" class="product-grid" aria-live="polite"></div>
+    </section>
+  </main>
+  <script src="../../js/auth-config.js"></script>
+  <script src="../../js/cognito-auth.js"></script>
+  <script src="homePage.js"></script>
+</body>
+</html>

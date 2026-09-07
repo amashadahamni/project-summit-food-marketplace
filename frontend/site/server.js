@@ -17,7 +17,8 @@ const mimeTypes = {
 const server = http.createServer((req, res) => {
   let filePath = req.url.split('?')[0];
   if (filePath === '/' || filePath === '') {
-    filePath = '/index.html';
+    res.writeHead(302, { Location: '/app/home/home.html' });
+    return res.end();
   }
   const fullPath = path.join(siteRoot, decodeURIComponent(filePath));
   fs.readFile(fullPath, (err, content) => {

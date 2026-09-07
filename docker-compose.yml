@@ -16,39 +16,51 @@ services:
     build: ./services/product-service
     environment:
       DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
+      COGNITO_REGION: ${COGNITO_REGION}
+      COGNITO_USER_POOL_ID: ${COGNITO_USER_POOL_ID}
+      COGNITO_CLIENT_ID: ${COGNITO_CLIENT_ID}
     depends_on:
       - postgres
     ports:
       - "8001:8001"
 
+  user-service:
+    build: ./services/user-service
+    environment:
+      DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
+      COGNITO_REGION: ${COGNITO_REGION}
+      COGNITO_USER_POOL_ID: ${COGNITO_USER_POOL_ID}
+      COGNITO_CLIENT_ID: ${COGNITO_CLIENT_ID}
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+
   cart-service:
     build: ./services/cart-service
     environment:
       DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
+      PRODUCT_SERVICE_URL: http://product-service:8001
+      COGNITO_REGION: ${COGNITO_REGION}
+      COGNITO_USER_POOL_ID: ${COGNITO_USER_POOL_ID}
+      COGNITO_CLIENT_ID: ${COGNITO_CLIENT_ID}
     depends_on:
       - postgres
     ports:
       - "8002:8002"
 
-  approval-service:
-    build: ./services/approval-service
-    environment:
-      DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
-    depends_on:
-      - postgres
-    ports:
-      - "8003:8003"
-
   bff:
     build: ./bff
     environment:
+      COGNITO_USER_POOL_ID: ${COGNITO_USER_POOL_ID}
+      COGNITO_CLIENT_ID: ${COGNITO_CLIENT_ID}
+      USER_SERVICE_URL: http://user-service:8000
       PRODUCT_SERVICE_URL: http://product-service:8001
       CART_SERVICE_URL: http://cart-service:8002
-      APPROVAL_SERVICE_URL: http://approval-service:8003
     depends_on:
+      - user-service
       - product-service
       - cart-service
-      - approval-service
     ports:
       - "8080:8080"
 

@@ -1,15 +1,11 @@
-﻿// Fill in your values then hard-refresh the browser
+﻿// Copy this file's values from your Cognito User Pool app client settings.
 window.AUTH_CONFIG = {
-  // ─── Google OAuth ────────────────────────────────────────────────────────
-  // 1. Go to https://console.cloud.google.com/apis/credentials
-  // 2. Create OAuth 2.0 Client ID (type: Web application)
-  // 3. Add  http://localhost:3000  to "Authorised JavaScript origins"
-  // 4. Paste the Client ID below
-  googleClientId: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
-
-  // ─── AWS Cognito (optional – only needed when deploying to production) ───
-  userPoolDomain: "YOUR_COGNITO_DOMAIN",
-  clientId:       "YOUR_COGNITO_CLIENT_ID",
-  redirectUri:    "http://localhost:3000/",
-  scope:          "openid profile email"
+  cognito: {
+    domain: "eu-north-1dhrx3bgdc.auth.eu-north-1.amazoncognito.com",
+    clientId: "4d5r9b0asqd44np6tchhkhrlv3",
+    loginRedirectUri: "http://127.0.0.1:3000/frontend/login/login.html",
+    signupRedirectUri: "http://127.0.0.1:3000/frontend/signup/signup.html",
+    logoutUri: "http://127.0.0.1:3000/",
+    scope: "openid profile email"
+  }
 };

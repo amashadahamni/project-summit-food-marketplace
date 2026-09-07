@@ -1,542 +1,154 @@
 openapi: 3.0.3
 info:
-  title: Summit Food Marketplace API Specification
-  description: >-
-    OpenAPI contract for the externally consumed APIs of the Summit Food Marketplace
-    project. This specification reflects the BFF endpoints and the backend product,
-    cart, and approval services.
+  title: Summit Food Marketplace BFF API
   version: 1.0.0
-  contact:
-    name: Team Summit
+  description: Frontend-facing API. Product approval is owned by Product Service.
 servers:
   - url: http://localhost:8080
-    description: BFF API (frontend-facing interface)
-  - url: http://localhost:8001
-    description: Product Service
-  - url: http://localhost:8002
-    description: Cart Service
-  - url: http://localhost:8003
-    description: Approval Service
 security:
   - bearerAuth: []
-tags:
-  - name: BFF
-    description: Frontend-facing routes exposed by the Backend for Frontend
-  - name: Products
-    description: Product catalog and product management APIs
-  - name: Carts
-    description: Customer shopping cart APIs
-  - name: Approvals
-    description: Supplier product approval and rejection APIs
 paths:
-  /api/products:
+  /api/v1/products:
     get:
-      tags:
-        - BFF
-      summary: Get products
-      description: Returns products from the product service.
+      security: []
+      summary: List approved and active products
       parameters:
         - in: query
-          name: approved
-          schema:
-            type: boolean
-          required: false
-          description: Filter products by approval status.
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-        '400':
-          description: Bad request
-    post:
-      tags:
-        - BFF
-      summary: Create a product
-      description: Creates a product in the product service.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
-      responses:
-        '200':
-          description: Product created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-        '400':
-          description: Invalid input
-
-  /api/carts:
-    post:
-      tags:
-        - BFF
-      summary: Create or update cart
-      description: Creates or updates a customer cart.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Cart'
-      responses:
-        '200':
-          description: Cart created or updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Cart'
-        '400':
-          description: Invalid cart payload
-
-  /api/carts/{customer_id}:
-    get:
-      tags:
-        - BFF
-      summary: Get cart by customer id
-      parameters:
-        - in: path
-          name: customer_id
-          required: true
-          schema:
-            type: integer
-          description: Customer identifier.
-      responses:
-        '200':
-          description: Cart retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Cart'
-        '404':
-          description: Cart not found
-
-  /api/submissions:
-    get:
-      tags:
-        - BFF
-      summary: Get submissions
-      description: Returns supplier submissions.
-      parameters:
+          name: search
+          schema: { type: string }
         - in: query
-          name: status
-          schema:
-            type: string
-          required: false
-          description: Optional filter by submission status.
+          name: category
+          schema: { type: string }
       responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Submission'
-        '400':
-          description: Bad request
-
-  /api/submissions/{submission_id}/approve:
+        '200': { description: Customer-visible product list }
+    post:
+      summary: Submit a product as a Supplier
+      responses:
+        '201': { description: Product submitted for review }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/products/mine:
+    get:
+      summary: List products owned by the signed-in Supplier
+      responses:
+        '200': { description: Supplier product list }
+  /api/v1/products/review/pending:
+    get:
+      summary: List pending products as a Data Steward
+      responses:
+        '200': { description: Pending product list }
+  /api/v1/products/{productId}:
+    get:
+      security: []
+      summary: Get an approved and active product
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
+      responses:
+        '200': { description: Customer-visible product }
+        '404': { description: Product does not exist or is not customer-visible }
+    patch:
+      summary: Edit a supplier-owned product and resubmit it
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
+      responses:
+        '200': { description: Product is pending review }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/products/{productId}/approve:
     put:
-      tags:
-        - BFF
-      summary: Approve a submission
-      parameters:
-        - in: path
-          name: submission_id
-          required: true
-          schema:
-            type: integer
-          description: Submission identifier.
+      summary: Approve a product as a Data Steward
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
       responses:
-        '200':
-          description: Submission approved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Submission'
-        '404':
-          description: Submission not found
-
-  /api/submissions/{submission_id}/reject:
+        '200': { description: Product approved }
+  /api/v1/products/{productId}/reject:
     put:
-      tags:
-        - BFF
-      summary: Reject a submission
-      parameters:
-        - in: path
-          name: submission_id
-          required: true
-          schema:
-            type: integer
-          description: Submission identifier.
-        - in: query
-          name: reason
-          required: true
-          schema:
-            type: string
-          description: Rejection reason sent to the approval service.
-      responses:
-        '200':
-          description: Submission rejected successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Submission'
-        '404':
-          description: Submission not found
-
-  /products:
-    get:
-      tags:
-        - Products
-      summary: List products from the product service
-      parameters:
-        - in: query
-          name: approved
-          schema:
-            type: boolean
-          required: false
-      responses:
-        '200':
-          description: Products returned successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-    post:
-      tags:
-        - Products
-      summary: Create a product in the product service
+      summary: Reject a product with a required reason
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
+            schema: { $ref: '#/components/schemas/Rejection' }
       responses:
-        '200':
-          description: Product created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-
-  /products/{product_id}:
+        '200': { description: Product rejected }
+        '422': { description: Reason is missing or invalid }
+  /api/v1/users/me:
     get:
-      tags:
-        - Products
-      summary: Get a single product by id
-      parameters:
-        - in: path
-          name: product_id
-          required: true
-          schema:
-            type: integer
+      summary: Get the signed-in user's application profile
       responses:
-        '200':
-          description: Product found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-        '404':
-          description: Product not found
+        '200': { description: User profile }
+    patch:
+      summary: Update the signed-in user's display name
+      responses:
+        '200': { description: User profile updated }
+  /api/v1/cart:
+    get:
+      summary: Get or create the signed-in Customer's active cart
+      responses:
+        '200': { description: Active cart }
+  /api/v1/cart/items:
     put:
-      tags:
-        - Products
-      summary: Update a product by id
-      parameters:
-        - in: path
-          name: product_id
-          required: true
-          schema:
-            type: integer
+      summary: Add or update a cart item quantity
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/Product'
+            schema: { $ref: '#/components/schemas/CartItemRequest' }
       responses:
-        '200':
-          description: Product updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-        '404':
-          description: Product not found
-
-  /carts/{customer_id}:
-    get:
-      tags:
-        - Carts
-      summary: Get customer cart
-      parameters:
-        - in: path
-          name: customer_id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Cart found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Cart'
-        '404':
-          description: Cart not found
-
-  /carts:
-    post:
-      tags:
-        - Carts
-      summary: Create or replace a cart
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Cart'
-      responses:
-        '200':
-          description: Cart saved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Cart'
-
-  /carts/{customer_id}/items/{product_id}:
+        '200': { description: Cart updated }
+        '422': { description: Quantity exceeds available stock }
+  /api/v1/cart/items/{productId}:
     delete:
-      tags:
-        - Carts
-      summary: Remove a product from a cart
-      parameters:
-        - in: path
-          name: customer_id
-          required: true
-          schema:
-            type: integer
-        - in: path
-          name: product_id
-          required: true
-          schema:
-            type: integer
+      summary: Remove an item from the signed-in Customer's cart
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
       responses:
-        '200':
-          description: Item removed successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Cart'
-        '404':
-          description: Cart not found
-
-  /submissions:
-    get:
-      tags:
-        - Approvals
-      summary: List submissions
-      parameters:
-        - in: query
-          name: status
-          schema:
-            type: string
-          required: false
-      responses:
-        '200':
-          description: Submissions retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Submission'
+        '204': { description: Cart item removed }
+  /api/v1/auth/exchange:
     post:
-      tags:
-        - Approvals
-      summary: Submit a product for approval
+      security: []
+      summary: Exchange a Cognito authorization code and create an HTTP-only BFF session
       requestBody:
         required: true
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/Submission'
+            schema: { $ref: '#/components/schemas/AuthorizationCodeExchange' }
       responses:
-        '200':
-          description: Submission created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Submission'
-
-  /submissions/{submission_id}/approve:
-    put:
-      tags:
-        - Approvals
-      summary: Approve a submission
-      parameters:
-        - in: path
-          name: submission_id
-          required: true
-          schema:
-            type: integer
+        '200': { description: Session created; access token is held only in an HTTP-only cookie }
+        '401': { description: Cognito rejected the authorization code }
+  /api/v1/auth/logout:
+    post:
+      security: []
+      summary: Clear the BFF session cookie
       responses:
-        '200':
-          description: Submission approved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Submission'
-        '404':
-          description: Submission not found
-
-  /submissions/{submission_id}/reject:
-    put:
-      tags:
-        - Approvals
-      summary: Reject a submission
-      parameters:
-        - in: path
-          name: submission_id
-          required: true
-          schema:
-            type: integer
-        - in: query
-          name: reason
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Submission rejected successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Submission'
-        '404':
-          description: Submission not found
+        '204': { description: Session cleared }
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  parameters:
+    ProductId:
+      name: productId
+      in: path
+      required: true
+      schema: { type: integer, minimum: 1 }
+  responses:
+    Unauthorized: { description: Missing, invalid, or expired Cognito access token }
+    Forbidden: { description: Cognito group does not allow this action }
   schemas:
-    Product:
+    Rejection:
       type: object
-      required:
-        - name
-        - category
-        - price
-        - description
-        - stock
-        - supplier_id
+      required: [reason]
       properties:
-        id:
-          type: integer
-          example: 1
-        name:
-          type: string
-          example: Fresh Apples
-        category:
-          type: string
-          example: Fruit
-        price:
-          type: number
-          format: double
-          example: 4.5
-        description:
-          type: string
-          example: Organic red apples
-        stock:
-          type: integer
-          example: 100
-        supplier_id:
-          type: integer
-          example: 10
-        approved:
-          type: boolean
-          example: false
-        status:
-          type: string
-          example: pending
-        rejection_reason:
-          type: string
-          example: ""
-
-    CartItem:
+        reason: { type: string, minLength: 3, maxLength: 500 }
+    CartItemRequest:
       type: object
-      required:
-        - product_id
-        - quantity
+      required: [product_id, quantity]
       properties:
-        product_id:
-          type: integer
-          example: 1
-        quantity:
-          type: integer
-          example: 2
-
-    Cart:
+        product_id: { type: integer, minimum: 1 }
+        quantity: { type: integer, minimum: 1 }
+    AuthorizationCodeExchange:
       type: object
-      required:
-        - customer_id
-        - items
+      required: [code, codeVerifier, redirectUri]
       properties:
-        customer_id:
-          type: integer
-          example: 12
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CartItem'
-
-    Submission:
-      type: object
-      required:
-        - supplier_id
-        - product_name
-        - category
-        - price
-        - description
-        - stock
-      properties:
-        id:
-          type: integer
-          example: 1
-        supplier_id:
-          type: integer
-          example: 25
-        product_name:
-          type: string
-          example: Fresh Apples
-        category:
-          type: string
-          example: Fruit
-        price:
-          type: number
-          example: 4.5
-        description:
-          type: string
-          example: Organic red apples
-        stock:
-          type: integer
-          example: 100
-        status:
-          type: string
-          example: pending
-        rejection_reason:
-          type: string
-          example: ""
+        code: { type: string }
+        codeVerifier: { type: string }
+        redirectUri: { type: string, format: uri }
