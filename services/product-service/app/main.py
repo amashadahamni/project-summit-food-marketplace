@@ -2,11 +2,14 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
-from .database import Base, engine
+from .database import Base, SessionLocal, engine
 from .routers import router
+from .services import seed_demo_products
 
 
 Base.metadata.create_all(bind=engine)
+with SessionLocal() as database:
+    seed_demo_products(database)
 app = FastAPI(title="Summit Product Service", version="1.0.0")
 app.include_router(router)
 

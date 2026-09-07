@@ -3,9 +3,9 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from .database import Base, engine, get_db
-from .schemas import UserProfileResponse, UserProfileUpdate
+from .schemas import CustomerReviewCreate, CustomerReviewResponse, UserProfileResponse, UserProfileUpdate
 from .security import Principal, current_principal
-from .services import get_or_create_profile, update_profile
+from .services import create_review, customer_reviews, get_or_create_profile, update_profile
 
 
 Base.metadata.create_all(bind=engine)
@@ -24,6 +24,16 @@ def my_profile(principal: Principal = Depends(current_principal), database: Sess
 @app.patch("/users/me", response_model=UserProfileResponse, tags=["users"])
 def edit_my_profile(payload: UserProfileUpdate, principal: Principal = Depends(current_principal), database: Session = Depends(get_db)):
     return response(update_profile(database, principal, payload), principal)
+
+
+@app.get("/users/me/reviews", response_model=list[CustomerReviewResponse], tags=["reviews"])
+def my_reviews(principal: Principal = Depends(current_principal), database: Session = Depends(get_db)):
+    return customer_reviews(database, principal)
+
+
+@app.post("/users/me/reviews", response_model=CustomerReviewResponse, status_code=201, tags=["reviews"])
+def add_review(payload: CustomerReviewCreate, principal: Principal = Depends(current_principal), database: Session = Depends(get_db)):
+    return create_review(database, principal, payload.rating, payload.comment)
 
 
 @app.get("/health", tags=["operations"])

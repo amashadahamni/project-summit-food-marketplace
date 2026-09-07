@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from .models import UserProfile
+from .models import CustomerReview, UserProfile
 from .schemas import UserProfileUpdate
 from .security import Principal
 
@@ -22,3 +22,16 @@ def update_profile(database: Session, principal: Principal, payload: UserProfile
     database.commit()
     database.refresh(profile)
     return profile
+
+
+def create_review(database: Session, principal: Principal, rating: int, comment: str) -> CustomerReview:
+    get_or_create_profile(database, principal)
+    review = CustomerReview(customer_subject=principal.subject, rating=rating, comment=comment.strip())
+    database.add(review)
+    database.commit()
+    database.refresh(review)
+    return review
+
+
+def customer_reviews(database: Session, principal: Principal) -> list[CustomerReview]:
+    return list(database.query(CustomerReview).filter_by(customer_subject=principal.subject).order_by(CustomerReview.created_at.desc()).all())

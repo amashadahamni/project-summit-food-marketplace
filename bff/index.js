@@ -31,7 +31,7 @@ function authenticated(handler) {
       await handler(request, response);
     } catch (error) {
       const status = error.response?.status || error.statusCode || 500;
-      const detail = error.response?.data?.detail || error.response?.data?.error || 'The request could not be completed.';
+      const detail = error.response?.data?.detail || error.response?.data?.error || error.message || 'The request could not be completed.';
       response.status(status).json({ error: detail });
     }
   };
@@ -92,6 +92,16 @@ apiV1.get('/users/me', authenticated(async (req, res) => {
 apiV1.patch('/users/me', authenticated(async (req, res) => {
   const { data } = await axios.patch(`${userBase}/users/me`, req.body, { headers: forwardAuthorization(req) });
   res.json(data);
+}));
+
+apiV1.get('/users/me/reviews', authenticated(async (req, res) => {
+  const { data } = await axios.get(`${userBase}/users/me/reviews`, { headers: forwardAuthorization(req) });
+  res.json(data);
+}));
+
+apiV1.post('/users/me/reviews', authenticated(async (req, res) => {
+  const { data } = await axios.post(`${userBase}/users/me/reviews`, req.body, { headers: forwardAuthorization(req) });
+  res.status(201).json(data);
 }));
 
 apiV1.get('/cart', authenticated(async (req, res) => {

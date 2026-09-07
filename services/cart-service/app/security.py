@@ -30,7 +30,4 @@ def current_customer(credentials: HTTPAuthorizationCredentials | None = Depends(
         raise HTTPException(status_code=401, detail="Invalid access token") from error
     if claims.get("token_use") != "access" or claims.get("client_id") != client_id:
         raise HTTPException(status_code=401, detail="Invalid access token")
-    principal = Principal(claims["sub"], set(claims.get("cognito:groups", [])))
-    if "Customer" not in principal.roles:
-        raise HTTPException(status_code=403, detail="Customer role is required")
-    return principal
+    return Principal(claims["sub"], set(claims.get("cognito:groups", [])))

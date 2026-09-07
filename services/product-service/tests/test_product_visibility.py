@@ -1,6 +1,22 @@
 from app.database import Base, SessionLocal, engine
 from app.models import Product
-from app.services import customer_products
+from app.services import customer_products, seed_demo_products
+
+
+def test_demo_catalog_seeds_only_an_empty_database():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    database = SessionLocal()
+    try:
+        seed_demo_products(database)
+        seed_demo_products(database)
+
+        products = customer_products(database, search=None, category=None)
+
+        assert len(products) == 50
+        assert {product.category for product in products} >= {"Biscuits", "Chocolates", "Dairy", "Drinks", "Fruit", "Meats", "Pantry", "Seafood", "Vegetables"}
+    finally:
+        database.close()
 
 
 def test_customer_results_exclude_pending_rejected_and_inactive_products():

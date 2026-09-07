@@ -1,4 +1,5 @@
 const cognito = window.AUTH_CONFIG?.cognito;
+const bffOrigin = `${location.protocol}//${location.hostname}:8080`;
 const isConfigured = cognito &&
   cognito.domain !== "YOUR_DOMAIN.auth.YOUR_REGION.amazoncognito.com" &&
   cognito.clientId !== "YOUR_APP_CLIENT_ID";
@@ -37,12 +38,12 @@ async function redirectToCognito() {
     code_challenge: await createCodeChallenge(codeVerifier),
     code_challenge_method: "S256"
   });
-  const page = isSignup ? "signup" : "login";
-  location.assign(`https://${cognito.domain}/${page}?${parameters}`);
+  const route = isSignup ? "signup" : "oauth2/authorize";
+  location.assign(`https://${cognito.domain}/${route}?${parameters}`);
 }
 
 function signOut() {
-  fetch("http://localhost:8080/api/v1/auth/logout", { method: "POST", credentials: "include" }).finally(() => {
+  fetch(`${bffOrigin}/api/v1/auth/logout`, { method: "POST", credentials: "include" }).finally(() => {
   const parameters = new URLSearchParams({
     client_id: cognito.clientId,
     logout_uri: cognito.logoutUri
@@ -56,7 +57,7 @@ function readAuthorizationCode() {
 }
 
 async function exchangeCodeWithBff(code, codeVerifier) {
-  const response = await fetch("http://localhost:8080/api/v1/auth/exchange", {
+  const response = await fetch(`${bffOrigin}/api/v1/auth/exchange`, {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -71,8 +72,8 @@ async function exchangeCodeWithBff(code, codeVerifier) {
   return payload;
 }
 
-const googleButton = document.getElementById("googleBtn");
-googleButton?.addEventListener("click", redirectToCognito);
+const cognitoButton = document.getElementById("cognitoBtn");
+cognitoButton?.addEventListener("click", redirectToCognito);
 
 const signOutButton = document.getElementById("signOutBtn");
 signOutButton?.addEventListener("click", signOut);

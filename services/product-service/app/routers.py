@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -20,8 +22,10 @@ def product_or_404(product_id: int, database: Session) -> Product:
 
 
 @router.get("", response_model=list[ProductResponse])
-def list_customer_products(search: str | None = Query(default=None, max_length=160), category: str | None = Query(default=None, max_length=80), database: Session = Depends(get_db)):
-    return customer_products(database, search, category)
+def list_customer_products(search: str | None = Query(default=None, max_length=160), category: str | None = Query(default=None, max_length=80), minimum_price: Decimal | None = Query(default=None, ge=0), maximum_price: Decimal | None = Query(default=None, ge=0), in_stock: bool = False, database: Session = Depends(get_db)):
+    if minimum_price is not None and maximum_price is not None and minimum_price > maximum_price:
+        raise HTTPException(status_code=422, detail="Minimum price cannot exceed maximum price")
+    return customer_products(database, search, category, minimum_price, maximum_price, in_stock)
 
 @router.post("", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
 def submit_product(payload: ProductCreate, supplier: Principal = Depends(require_role("Supplier")), database: Session = Depends(get_db)):

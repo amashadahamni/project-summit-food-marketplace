@@ -1,0 +1,19 @@
+.featured .product-card {
+  min-height: 286px;
+  overflow: hidden;
+}
+
+.featured .product-card__image {
+  display: block;
+  width: calc(100% + 36px);
+  height: 144px;
+  margin: -18px -18px 16px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (max-width: 800px) {
+  .featured .product-card__image {
+    height: 180px;
+  }
+}

@@ -19,6 +19,15 @@ paths:
         - in: query
           name: category
           schema: { type: string }
+        - in: query
+          name: minimum_price
+          schema: { type: number, minimum: 0 }
+        - in: query
+          name: maximum_price
+          schema: { type: number, minimum: 0 }
+        - in: query
+          name: in_stock
+          schema: { type: boolean, default: false }
       responses:
         '200': { description: Customer-visible product list }
     post:

@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home | Summit Food Marketplace</title>
   <link rel="stylesheet" href="homeStyles.css">
+  <link rel="stylesheet" href="homeProductImages.css">
+  <link rel="stylesheet" href="homeBanner.css">
 </head>
 <body>
   <header class="site-header">
@@ -16,11 +18,25 @@
       <a href="../service/account.html">Account</a>
     </nav>
     <div class="auth-actions">
-      <a href="../../frontend/login/login.html">Log in</a>
-      <a class="button" href="../../frontend/signup/signup.html">Sign up</a>
-      <button id="signOutBtn" class="text-button" type="button">Log out</button>
+      <a id="loginLink" href="../../frontend/login/login.html" hidden>Log in</a>
+      <a id="signupLink" class="button" href="../../frontend/signup/signup.html" hidden>Sign up</a>
+      <button id="signOutBtn" class="text-button" type="button" hidden>Log out</button>
     </div>
   </header>
+  <section class="product-banner" aria-label="Featured local food">
+    <div class="product-banner__track">
+      <img class="product-banner__image" src="../../assets/home-images/fruit.jpg" alt="Fresh fruit selection">
+      <img class="product-banner__image" src="../../assets/home-images/vegetables.jpg" alt="Fresh vegetable selection">
+      <img class="product-banner__image" src="../../assets/home-images/seafood.jpg" alt="Fresh seafood selection">
+      <img class="product-banner__image" src="../../assets/home-images/drinks.jpg" alt="Local drinks selection">
+      <img class="product-banner__image" src="../../assets/home-images/pantry.jpg" alt="Pantry food selection">
+      <img class="product-banner__image" src="../../assets/home-images/fruit.jpg" alt="" aria-hidden="true">
+      <img class="product-banner__image" src="../../assets/home-images/vegetables.jpg" alt="" aria-hidden="true">
+      <img class="product-banner__image" src="../../assets/home-images/seafood.jpg" alt="" aria-hidden="true">
+      <img class="product-banner__image" src="../../assets/home-images/drinks.jpg" alt="" aria-hidden="true">
+      <img class="product-banner__image" src="../../assets/home-images/pantry.jpg" alt="" aria-hidden="true">
+    </div>
+  </section>
   <main>
     <section class="hero">
       <p class="eyebrow">Local food, thoughtfully sourced</p>
@@ -40,13 +56,14 @@
       </div>
     </section>
     <section class="featured" aria-labelledby="featured-title">
-      <div class="section-heading"><div><p class="eyebrow">Marketplace</p><h2 id="featured-title">Approved products</h2></div><a class="plain-link" href="../product/products.html">View all</a></div>
+      <div class="section-heading"><div><p class="eyebrow">Marketplace</p><h2 id="featured-title">All Products</h2></div><a class="plain-link" href="../product/products.html">View all</a></div>
       <p id="productStatus" class="status">Loading products...</p>
       <div id="productList" class="product-grid" aria-live="polite"></div>
     </section>
   </main>
   <script src="../../js/auth-config.js"></script>
   <script src="../../js/cognito-auth.js"></script>
+  <script src="homeProductImages.js"></script>
   <script src="homePage.js"></script>
 </body>
 </html>

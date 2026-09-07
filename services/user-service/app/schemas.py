@@ -16,3 +16,14 @@ class UserProfileResponse(BaseModel):
     roles: list[str]
     created_at: datetime
     updated_at: datetime
+
+
+class CustomerReviewCreate(BaseModel):
+    rating: int = Field(ge=1, le=5)
+    comment: str = Field(min_length=2, max_length=1000)
+
+
+class CustomerReviewResponse(CustomerReviewCreate):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    created_at: datetime

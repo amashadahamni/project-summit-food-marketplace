@@ -58,6 +58,15 @@ COGNITO_CLIENT_ID=your_app_client_id
 
 Do not commit a Cognito client secret, Google secret, tokens, or AWS credentials. Create Cognito groups named `Customer`, `Supplier`, and `DataSteward`, then assign test users to the appropriate group.
 
+For the complete Docker stack, copy `.env.example` to `.env`, replace the Cognito placeholders, then run:
+
+```powershell
+Copy-Item .env.example .env
+docker compose up --build
+```
+
+The marketplace is available at `http://localhost:3000`, the BFF at `http://localhost:8080`, and the service health endpoints at ports `8000` through `8002`. Stop and remove containers with `docker compose down`; add `-v` only when you deliberately want to remove local database data.
+
 Install and run each service in a separate terminal:
 
 ```powershell
