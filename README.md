@@ -20,9 +20,9 @@ Architecture:
 - `frontend/supplier-app` — supplier microfrontend
 - `frontend/datasteward-app` — data steward microfrontend
 - `bff` — Backend-for-Frontend Node.js app
-- `services/user-service` — FastAPI user profile microservice; Cognito remains the source of identity and roles
-- `services/product-service` — FastAPI product microservice
-- `services/cart-service` — FastAPI cart microservice
+- `backend/user-service` — FastAPI user profile microservice; Cognito remains the source of identity and roles
+- `backend/product-service` — FastAPI product microservice, including the approval module
+- `backend/cart-service` — FastAPI cart microservice
 
 ## Backend services
 
@@ -70,9 +70,9 @@ The marketplace is available at `http://localhost:3000`, the BFF at `http://loca
 Install and run each service in a separate terminal:
 
 ```powershell
-Set-Location services/user-service; py -m pip install -r requirements.txt; py -m uvicorn app.main:app --port 8000
-Set-Location services/product-service; py -m pip install -r requirements.txt; py -m uvicorn app.main:app --port 8001
-Set-Location services/cart-service; py -m pip install -r requirements.txt; py -m uvicorn app.main:app --port 8002
+Set-Location backend/user-service; py -m pip install -r requirements.txt; py -m uvicorn app.main:app --port 8000
+Set-Location backend/product-service; py -m pip install -r requirements.txt; py -m uvicorn app.main:app --port 8001
+Set-Location backend/cart-service; py -m pip install -r requirements.txt; py -m uvicorn app.main:app --port 8002
 Set-Location bff; npm install; npm start
 ```
 
@@ -81,7 +81,7 @@ Each service provides `/health` and `/ready`. PostgreSQL is configured through `
 ## Next steps
 
 1. Install backend dependencies:
-   - `cd services/product-service && pip install -r requirements.txt`
+   - `cd backend/product-service && pip install -r requirements.txt`
    - Repeat for `user-service` and `cart-service`
 2. Install BFF dependencies:
    - `cd bff && npm install`

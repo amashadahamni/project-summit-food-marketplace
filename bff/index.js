@@ -69,18 +69,23 @@ apiV1.patch('/products/:productId', authenticated(async (req, res) => {
   res.json(data);
 }));
 
+apiV1.delete('/products/:productId', authenticated(async (req, res) => {
+  await axios.delete(`${productBase}/products/${req.params.productId}`, { headers: forwardAuthorization(req) });
+  res.status(204).send();
+}));
+
 apiV1.get('/products/review/pending', authenticated(async (req, res) => {
   const { data } = await axios.get(`${productBase}/products/review/pending`, { headers: forwardAuthorization(req) });
   res.json(data);
 }));
 
-apiV1.put('/products/:productId/approve', authenticated(async (req, res) => {
-  const { data } = await axios.put(`${productBase}/products/${req.params.productId}/approve`, {}, { headers: forwardAuthorization(req) });
+apiV1.patch('/products/:productId/approve', authenticated(async (req, res) => {
+  const { data } = await axios.patch(`${productBase}/products/${req.params.productId}/approval`, {}, { params: { action: 'approve' }, headers: forwardAuthorization(req) });
   res.json(data);
 }));
 
-apiV1.put('/products/:productId/reject', authenticated(async (req, res) => {
-  const { data } = await axios.put(`${productBase}/products/${req.params.productId}/reject`, req.body, { headers: forwardAuthorization(req) });
+apiV1.patch('/products/:productId/reject', authenticated(async (req, res) => {
+  const { data } = await axios.patch(`${productBase}/products/${req.params.productId}/approval`, req.body, { params: { action: 'reject' }, headers: forwardAuthorization(req) });
   res.json(data);
 }));
 

@@ -16,7 +16,7 @@ services:
       retries: 10
 
   product-service:
-    build: ./services/product-service
+    build: ./backend/product-service
     environment:
       DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
       COGNITO_REGION: eu-north-1
@@ -34,7 +34,7 @@ services:
       retries: 5
 
   user-service:
-    build: ./services/user-service
+    build: ./backend/user-service
     environment:
       DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
       COGNITO_REGION: eu-north-1
@@ -52,7 +52,7 @@ services:
       retries: 5
 
   cart-service:
-    build: ./services/cart-service
+    build: ./backend/cart-service
     environment:
       DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
       PRODUCT_SERVICE_URL: http://product-service:8001

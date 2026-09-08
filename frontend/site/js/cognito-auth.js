@@ -5,6 +5,17 @@ const isConfigured = cognito &&
   cognito.clientId !== "YOUR_APP_CLIENT_ID";
 const authUi = window.summitAuthUI;
 
+function useCallbackOrigin() {
+  if (!isConfigured) return true;
+
+  const isSignup = document.body.dataset.authMode === "signup";
+  const callback = new URL(isSignup ? cognito.signupRedirectUri : cognito.loginRedirectUri);
+  if (location.origin === callback.origin) return true;
+
+  location.replace(`${callback.origin}${location.pathname}${location.search}${location.hash}`);
+  return false;
+}
+
 function createCodeVerifier() {
   const values = new Uint8Array(32);
   crypto.getRandomValues(values);
@@ -38,7 +49,7 @@ async function redirectToCognito() {
     code_challenge: await createCodeChallenge(codeVerifier),
     code_challenge_method: "S256"
   });
-  const route = isSignup ? "signup" : "oauth2/authorize";
+  const route = isSignup ? "signup" : "login";
   location.assign(`https://${cognito.domain}/${route}?${parameters}`);
 }
 
@@ -72,22 +83,24 @@ async function exchangeCodeWithBff(code, codeVerifier) {
   return payload;
 }
 
-const cognitoButton = document.getElementById("cognitoBtn");
-cognitoButton?.addEventListener("click", redirectToCognito);
+if (useCallbackOrigin()) {
+  const cognitoButton = document.getElementById("cognitoBtn");
+  cognitoButton?.addEventListener("click", redirectToCognito);
 
-const signOutButton = document.getElementById("signOutBtn");
-signOutButton?.addEventListener("click", signOut);
+  const signOutButton = document.getElementById("signOutBtn");
+  signOutButton?.addEventListener("click", signOut);
 
-const authorizationCode = readAuthorizationCode();
-if (authorizationCode) {
-  const codeVerifier = sessionStorage.getItem("summit.cognito.codeVerifier");
-  exchangeCodeWithBff(authorizationCode, codeVerifier)
-    .then(() => {
-      sessionStorage.removeItem("summit.cognito.codeVerifier");
-      history.replaceState({}, document.title, location.pathname);
-      authUi?.showSuccess("there", "", "", document.body.dataset.authMode === "signup");
-    })
-    .catch(error => authUi?.showStatus(error.message, true));
+  const authorizationCode = readAuthorizationCode();
+  if (authorizationCode) {
+    const codeVerifier = sessionStorage.getItem("summit.cognito.codeVerifier");
+    exchangeCodeWithBff(authorizationCode, codeVerifier)
+      .then(() => {
+        sessionStorage.removeItem("summit.cognito.codeVerifier");
+        history.replaceState({}, document.title, location.pathname);
+        authUi?.showSuccess("there", "", "", document.body.dataset.authMode === "signup");
+      })
+      .catch(error => authUi?.showStatus(error.message, true));
+  }
 }
 
-  window.summitCognitoSignOut = signOut;
+window.summitCognitoSignOut = signOut;

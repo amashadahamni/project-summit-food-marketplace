@@ -60,14 +60,20 @@ paths:
       responses:
         '200': { description: Product is pending review }
         '403': { $ref: '#/components/responses/Forbidden' }
+    delete:
+      summary: Delete a supplier-owned product
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
+      responses:
+        '204': { description: Product deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
   /api/v1/products/{productId}/approve:
-    put:
+    patch:
       summary: Approve a product as a Data Steward
       parameters: [ { $ref: '#/components/parameters/ProductId' } ]
       responses:
         '200': { description: Product approved }
   /api/v1/products/{productId}/reject:
-    put:
+    patch:
       summary: Reject a product with a required reason
       parameters: [ { $ref: '#/components/parameters/ProductId' } ]
       requestBody:
