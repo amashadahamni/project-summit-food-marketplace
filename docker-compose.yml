@@ -95,7 +95,9 @@ services:
       retries: 5
 
   site:
-    build: ./frontend/site
+    build:
+      context: ./frontend
+      dockerfile: site/Dockerfile
     environment:
       PORT: 3000
     depends_on:
@@ -105,6 +107,16 @@ services:
       - "3000:3000"
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:3000/').then(response => process.exit(response.ok || response.status === 302 ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  demand-risk-service:
+    build: ./4ir-mvp/demand-risk-service
+    ports:
+      - "8004:8004"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8004/health')"]
       interval: 10s
       timeout: 5s
       retries: 5

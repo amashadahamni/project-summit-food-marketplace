@@ -5,7 +5,31 @@ on:
   pull_request:
 
 jobs:
-  verify:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Ruff
+        run: pip install ruff
+      - name: Lint Python services
+        run: ruff check backend
+      - name: Lint BFF
+        working-directory: bff
+        run: |
+          npm ci
+          npm run lint
+      - name: Lint frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run lint
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,12 +49,37 @@ jobs:
         run: |
           pip install -r requirements.txt
           pytest tests -q
-      - name: Compile User Service
+      - name: Test User Service
         working-directory: backend/user-service
         run: |
           pip install -r requirements.txt
-          python -m compileall -q app
+          pytest tests -q
       - name: Check BFF syntax
         run: node --check bff/index.js
       - name: Validate Compose file
         run: docker compose config -q
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+      - name: Run Cypress journeys
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: frontend
+          start: npm run dev
+          wait-on: http://localhost:3000
+          command: npm run cy:run
+  sonar:
+    if: ${{ secrets.SONAR_TOKEN != '' && secrets.SONAR_HOST_URL != '' }}
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Scan with SonarQube
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

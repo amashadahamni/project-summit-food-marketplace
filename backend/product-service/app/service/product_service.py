@@ -46,6 +46,9 @@ class ProductService:
     def list_pending_products(self) -> list[Product]:
         return self.repository.find_pending()
 
+    def list_review_history(self) -> list[Product]:
+        return self.repository.find_review_history()
+
     def update_approval(self, product_id: int, action: str, steward: Principal, reason: str | None = None) -> Product:
         product = self._find_product(product_id)
         if action == "approve":

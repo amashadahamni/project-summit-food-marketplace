@@ -4,7 +4,7 @@ import httpx
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
-from .models import Cart, CartItem
+from .models import Cart
 from .repository import CartRepository
 from .schemas import CartItemRequest
 from .service import CartService

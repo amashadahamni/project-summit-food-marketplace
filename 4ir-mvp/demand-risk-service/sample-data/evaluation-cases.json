@@ -1,0 +1,5 @@
+[
+  {"name": "High demand, low stock", "expected_risk": "high", "request": {"product_name": "Strawberries", "current_stock": 5, "lead_time_days": 3, "daily_sales": [8, 9, 7, 8, 10, 9, 8]}},
+  {"name": "Stable demand, adequate stock", "expected_risk": "low", "request": {"product_name": "Pasta Penne", "current_stock": 70, "lead_time_days": 4, "daily_sales": [5, 6, 5, 6, 5, 6, 5]}},
+  {"name": "No recent demand", "expected_risk": "no_recent_demand", "request": {"product_name": "Seasonal Sauce", "current_stock": 12, "lead_time_days": 5, "daily_sales": [0, 0, 0, 0, 0, 0, 0]}}
+]

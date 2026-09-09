@@ -5,8 +5,17 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const app = express();
 const allowedOrigins = (process.env.FRONTEND_ORIGIN || 'http://localhost:3000,http://127.0.0.1:3000').split(',');
+app.disable('x-powered-by');
+app.use((request, response, next) => {
+  response.set({
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'Referrer-Policy': 'strict-origin-when-cross-origin'
+  });
+  next();
+});
 app.use(cors({ origin: allowedOrigins, credentials: true }));
-app.use(express.json());
+app.use(express.json({ limit: '100kb' }));
 app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/v1/auth', authRoutes);
@@ -31,7 +40,7 @@ function authenticated(handler) {
       await handler(request, response);
     } catch (error) {
       const status = error.response?.status || error.statusCode || 500;
-      const detail = error.response?.data?.detail || error.response?.data?.error || error.message || 'The request could not be completed.';
+      const detail = status >= 500 ? 'The request could not be completed.' : error.response?.data?.detail || error.response?.data?.error || error.message || 'The request could not be completed.';
       response.status(status).json({ error: detail });
     }
   };
@@ -43,7 +52,7 @@ function upstream(handler) {
       await handler(request, response);
     } catch (error) {
       const status = error.response?.status || 503;
-      const detail = error.response?.data?.detail || 'A required service is unavailable.';
+      const detail = status >= 500 ? 'A required service is unavailable.' : error.response?.data?.detail || error.response?.data?.error || 'The request could not be completed.';
       response.status(status).json({ error: detail });
     }
   };
@@ -76,6 +85,11 @@ apiV1.delete('/products/:productId', authenticated(async (req, res) => {
 
 apiV1.get('/products/review/pending', authenticated(async (req, res) => {
   const { data } = await axios.get(`${productBase}/products/review/pending`, { headers: forwardAuthorization(req) });
+  res.json(data);
+}));
+
+apiV1.get('/products/review/history', authenticated(async (req, res) => {
+  const { data } = await axios.get(`${productBase}/products/review/history`, { headers: forwardAuthorization(req) });
   res.json(data);
 }));
 

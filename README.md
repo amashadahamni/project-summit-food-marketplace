@@ -19,6 +19,7 @@ Architecture:
 - `frontend/customer-app` — customer-facing microfrontend
 - `frontend/supplier-app` — supplier microfrontend
 - `frontend/datasteward-app` — data steward microfrontend
+- `frontend/src/main.jsx` — Vite single-spa shell and role-aware route guard
 - `bff` — Backend-for-Frontend Node.js app
 - `backend/user-service` — FastAPI user profile microservice; Cognito remains the source of identity and roles
 - `backend/product-service` — FastAPI product microservice, including the approval module
@@ -40,11 +41,12 @@ Product approval belongs in Product Service because it changes the product lifec
 
 The browser calls the Node.js BFF at `http://localhost:8080`; it validates the Cognito access token and forwards it to the Python service for independent authorization.
 
-- `GET /api/products?search=&category=`: public approved, active catalog
-- `POST /api/products`, `PATCH /api/products/:productId`, `GET /api/products/mine`: Supplier actions
-- `GET /api/products/review/pending`, `PUT /api/products/:productId/approve`, `PUT /api/products/:productId/reject`: Data Steward actions
-- `GET|PATCH /api/users/me`: authenticated profile
-- `GET /api/cart`, `PUT /api/cart/items`, `DELETE /api/cart/items/:productId`: Customer cart
+- `GET /api/v1/products?search=&category=`: public approved, active catalog
+- `POST /api/v1/products`, `PATCH /api/v1/products/:productId`, `GET /api/v1/products/mine`: Supplier actions
+- `GET /api/v1/products/review/pending`, `GET /api/v1/products/review/history`, `PATCH /api/v1/products/:productId/approve`, `PATCH /api/v1/products/:productId/reject`: Data Steward actions
+- `GET|PATCH /api/v1/users/me`: authenticated profile
+- `GET /api/v1/cart`, `PUT /api/v1/cart/items`, `DELETE /api/v1/cart/items/:productId`: Customer cart
+- `GET /api/v1/auth/me`: safe cookie-backed session identity and Cognito group roles for the SPA shell
 
 ## Configuration and local run
 
@@ -65,7 +67,7 @@ Copy-Item .env.example .env
 docker compose up --build
 ```
 
-The marketplace is available at `http://localhost:3000`, the BFF at `http://localhost:8080`, and the service health endpoints at ports `8000` through `8002`. Stop and remove containers with `docker compose down`; add `-v` only when you deliberately want to remove local database data.
+The marketplace is available at `http://localhost:3000`, the BFF at `http://localhost:8080`, marketplace service health endpoints at ports `8000` through `8002`, and the separate 4IR demand-risk API at `http://localhost:8004`. Stop and remove containers with `docker compose down`; add `-v` only when you deliberately want to remove local database data.
 
 Install and run each service in a separate terminal:
 
@@ -78,20 +80,8 @@ Set-Location bff; npm install; npm start
 
 Each service provides `/health` and `/ready`. PostgreSQL is configured through `DATABASE_URL`; Docker Compose uses the shared local database container when Docker Desktop is installed.
 
-## Next steps
+## Delivery status
 
-1. Install backend dependencies:
-   - `cd backend/product-service && pip install -r requirements.txt`
-   - Repeat for `user-service` and `cart-service`
-2. Install BFF dependencies:
-   - `cd bff && npm install`
-3. Install frontend dependencies:
-   - `cd frontend/customer-app && npm install`
-   - `cd frontend/supplier-app && npm install`
-   - `cd frontend/datasteward-app && npm install`
-   - `cd frontend/root-config && npm install`
-4. Start services and frontend apps in development.
+The Dockerized React/Redux/single-spa marketplace, BFF, three required FastAPI services, automated checks, and separate 4IR demand-risk MVP are implemented locally. The React shell reads only the BFF's HTTP-only-cookie session endpoint and restricts Supplier and Data Steward routes by Cognito group; service-side authorization remains authoritative.
 
-## Current scope
-
-The backend, BFF routing, database models, Cognito token validation, and core PDF business rules are now structured around the required services. The React single-spa microfrontends still need to replace their placeholder screens with role-aware pages and call the BFF routes above; their work should be kept separate by Customer catalog/cart, Supplier product management, and Data Steward review screens.
+Account-bound work cannot be claimed complete until it is performed in the project owner's AWS and SonarQube accounts: deployed HTTPS endpoint, Cognito users/groups and live role tests, CloudWatch/Budget/tag evidence, Sonar Quality Gate, and the recorded demonstrations. Follow [docs/submission-evidence.md](docs/submission-evidence.md) to complete and capture that evidence.

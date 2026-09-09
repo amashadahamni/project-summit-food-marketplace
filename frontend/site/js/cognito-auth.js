@@ -5,6 +5,19 @@ const isConfigured = cognito &&
   cognito.clientId !== "YOUR_APP_CLIENT_ID";
 const authUi = window.summitAuthUI;
 
+function roleLandingPage(roles) {
+  if (roles.includes("Supplier")) return "/supplier";
+  if (roles.includes("DataSteward")) return "/datasteward";
+  return "/customer";
+}
+
+function permittedReturnPage(returnTo, roles) {
+  if (returnTo === "/supplier" && roles.includes("Supplier")) return returnTo;
+  if (returnTo === "/datasteward" && roles.includes("DataSteward")) return returnTo;
+  if (returnTo === "/customer" && roles.includes("Customer")) return returnTo;
+  return null;
+}
+
 function useCallbackOrigin() {
   if (!isConfigured) return true;
 
@@ -39,6 +52,8 @@ async function redirectToCognito() {
 
   const isSignup = document.body.dataset.authMode === "signup";
   const redirectUri = isSignup ? cognito.signupRedirectUri : cognito.loginRedirectUri;
+  const returnTo = new URLSearchParams(location.search).get("returnTo");
+  if (returnTo) sessionStorage.setItem("summit.cognito.returnTo", returnTo);
   const codeVerifier = createCodeVerifier();
   sessionStorage.setItem("summit.cognito.codeVerifier", codeVerifier);
   const parameters = new URLSearchParams({
@@ -94,10 +109,14 @@ if (useCallbackOrigin()) {
   if (authorizationCode) {
     const codeVerifier = sessionStorage.getItem("summit.cognito.codeVerifier");
     exchangeCodeWithBff(authorizationCode, codeVerifier)
-      .then(() => {
+      .then((session) => {
         sessionStorage.removeItem("summit.cognito.codeVerifier");
         history.replaceState({}, document.title, location.pathname);
-        authUi?.showSuccess("there", "", "", document.body.dataset.authMode === "signup");
+        const returnTo = sessionStorage.getItem("summit.cognito.returnTo");
+        sessionStorage.removeItem("summit.cognito.returnTo");
+        const roles = session.roles || [];
+        document.body.dataset.homeUrl = permittedReturnPage(returnTo, roles) || roleLandingPage(roles);
+        authUi?.showSuccess(session.username || "there", "", "", document.body.dataset.authMode === "signup");
       })
       .catch(error => authUi?.showStatus(error.message, true));
   }

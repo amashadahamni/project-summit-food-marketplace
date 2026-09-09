@@ -1,5 +1,7 @@
 # Food Marketplace Use Cases
 
+Export: [use-case.svg](assets/use-case.svg)
+
 ```mermaid
 flowchart LR
   Customer[Customer]

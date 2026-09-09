@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const port = Number(process.env.PORT || 3000);
-const siteRoot = path.join(__dirname);
+const siteRoot = path.join(__dirname, '..', 'dist');
 
 const mimeTypes = {
   '.html': 'text/html',
@@ -16,13 +16,20 @@ const mimeTypes = {
 
 const server = http.createServer((req, res) => {
   let filePath = req.url.split('?')[0];
-  if (filePath === '/' || filePath === '') {
-    res.writeHead(302, { Location: '/app/home/home.html' });
-    return res.end();
-  }
+  if (filePath === '/' || filePath === '') filePath = '/index.html';
   const fullPath = path.join(siteRoot, decodeURIComponent(filePath));
   fs.readFile(fullPath, (err, content) => {
     if (err) {
+      if (!path.extname(filePath)) {
+        return fs.readFile(path.join(siteRoot, 'index.html'), (indexError, indexContent) => {
+          if (indexError) {
+            res.writeHead(500, { 'Content-Type': 'text/plain' });
+            return res.end('Application shell unavailable');
+          }
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end(indexContent);
+        });
+      }
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       return res.end('Not found');
     }

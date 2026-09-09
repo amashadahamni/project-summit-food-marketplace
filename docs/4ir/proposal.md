@@ -1,19 +1,25 @@
-# 4IR Proposal and Evaluation
+# 4IR Proposal: Demand Risk Decision Support MVP
 
-## Problem
+Architecture and data-flow export: [demand-risk-data-flow.svg](assets/demand-risk-data-flow.svg)
 
-Small food suppliers need a controlled way to publish stock while customers need reliable, approved product availability. Manual catalog administration delays publication and provides limited traceability.
+## Problem and stakeholder
 
-## Proposed solution
+Small food suppliers make reorder decisions from informal stock checks. Perishable products can sell out before the next delivery or be over-ordered and wasted. The primary user is a supplier inventory coordinator; the business owner is a small food-marketplace supplier.
 
-Summit Food Marketplace uses a role-aware digital marketplace. Suppliers submit and maintain products, Data Stewards approve or reject submissions with a recorded reason, and Customers see only approved active stock and manage one current cart.
+## Evidence and impact hypothesis
 
-## 4IR elements
+The marketplace already stores product stock and supports supplier inventory workflows. This MVP uses realistic synthetic daily unit-sales scenarios because no supplier-owned historic sales data has been supplied. The hypothesis is that a transparent risk alert makes low-stock decisions faster and more consistent without automating procurement.
 
-- Cloud-native services and managed identity support elastic, traceable workflows.
-- API-based services make the product lifecycle observable and integration-ready.
-- The audit trail produces structured lifecycle data for later analytics, demand forecasting, and stock-risk alerts.
+## Proposed 4IR solution and scope
 
-## MVP evaluation plan
+The separate `4ir-mvp/demand-risk-service` is an AI/ML-style decision-support MVP. It forecasts near-term daily demand from weighted recent sales history, calculates lead-time demand and safety stock, then returns a low, medium, high, or no-recent-demand risk recommendation.
 
-Recruit one representative from each role. Measure successful completion of: product submission, approval/rejection, catalogue discovery, cart update, and invalid-stock feedback. Record completion rate, elapsed time, errors, and qualitative feedback. Preserve anonymized results and screenshots as assessment evidence rather than fabricating outcomes.
+Included: a FastAPI API, explainable calculation, validation controls, Docker image, three repeatable scenarios, and automated tests. Excluded: automatic purchase orders, customer profiling, external model APIs, promotion/weather features, and production claims based on synthetic data.
+
+## Data, privacy, risks, and responsible use
+
+Inputs are aggregate daily unit counts, current stock, and lead time. No personal data is used. Outputs are recommendations, not automatic actions. Forecasts can be wrong when demand changes unexpectedly; suppliers must review the explanation and retain final control. Before a pilot, validate against consented supplier history and compare forecast error by product category.
+
+## Evaluation plan and success criteria
+
+Run the three labeled scenarios in `sample-data/evaluation-cases.json`. Success criteria are: every expected risk class is returned, invalid negative sales are rejected, and the API returns a result for a valid request. The results must be recorded from the automated run; synthetic results demonstrate software correctness only, not commercial forecasting accuracy.

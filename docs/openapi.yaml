@@ -46,6 +46,11 @@ paths:
       summary: List pending products as a Data Steward
       responses:
         '200': { description: Pending product list }
+  /api/v1/products/review/history:
+    get:
+      summary: List approved and rejected products as a Data Steward
+      responses:
+        '200': { description: Historical product review list }
   /api/v1/products/{productId}:
     get:
       security: []

@@ -35,6 +35,10 @@ class ProductRepository:
         query = select(Product).where(Product.status == "pending").order_by(Product.created_at)
         return list(self.database.scalars(query).all())
 
+    def find_review_history(self) -> list[Product]:
+        query = select(Product).where(Product.status != "pending").order_by(Product.updated_at.desc())
+        return list(self.database.scalars(query).all())
+
     def find_audit_events(self, product_id: int) -> list[ProductAuditEvent]:
         query = select(ProductAuditEvent).where(ProductAuditEvent.product_id == product_id).order_by(ProductAuditEvent.created_at)
         return list(self.database.scalars(query).all())

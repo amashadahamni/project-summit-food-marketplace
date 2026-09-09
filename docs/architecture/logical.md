@@ -1,5 +1,7 @@
 # Logical Architecture
 
+Export: [logical.svg](assets/logical.svg)
+
 ```mermaid
 flowchart LR
   Browser[Browser]

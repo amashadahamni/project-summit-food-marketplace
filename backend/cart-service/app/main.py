@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from sqlalchemy import text
 
 from .controller import router
-from .database import Base, engine, get_db
+from .database import Base, engine
 from .exceptions import CartServiceError, cart_service_error_handler, unexpected_error_handler
 
 

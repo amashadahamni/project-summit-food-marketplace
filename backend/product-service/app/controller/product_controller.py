@@ -37,6 +37,11 @@ def list_pending_products(steward: Principal = Depends(require_role("DataSteward
     return service.list_pending_products()
 
 
+@router.get("/review/history", response_model=list[ProductResponse])
+def list_review_history(steward: Principal = Depends(require_role("DataSteward")), service: ProductService = Depends(get_product_service)):
+    return service.list_review_history()
+
+
 @router.patch("/{product_id}", response_model=ProductResponse)
 def update_product(product_id: int, payload: ProductUpdate, supplier: Principal = Depends(require_role("Supplier")), service: ProductService = Depends(get_product_service)):
     return service.update_product(product_id, payload, supplier)

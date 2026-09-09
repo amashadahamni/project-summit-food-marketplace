@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from sqlalchemy.orm import Session
 
-from .models import Product
+from .models import Product, ProductAuditEvent
 from .repository import ProductRepository
 from .schemas import ProductCreate, ProductUpdate
 from .security import Principal
