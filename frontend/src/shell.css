@@ -1,0 +1,19 @@
+:root { font-family: Georgia, "Times New Roman", serif; color: #17324d; background: #f3f8f7; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: inherit; }
+.shell { min-height: 100vh; }
+.topbar { background: #0c456d; color: white; padding: 16px clamp(20px, 5vw, 72px); display: flex; justify-content: space-between; gap: 24px; align-items: center; }
+.brand { text-decoration: none; font-weight: 700; font-size: 1.25rem; }
+.nav { display: flex; gap: 18px; flex-wrap: wrap; font-family: Arial, sans-serif; font-size: .9rem; }
+.nav a { text-decoration: none; opacity: .86; }.nav a:hover { opacity: 1; text-decoration: underline; }
+.page { max-width: 1180px; padding: 44px 24px; margin: auto; }
+.eyebrow { color: #087d91; font: 700 .78rem Arial, sans-serif; text-transform: uppercase; letter-spacing: .08em; }
+h1 { color: #0c456d; margin: 8px 0; font-size: clamp(2rem, 4vw, 3.3rem); }.lead { color: #526778; max-width: 720px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin-top: 28px; }
+.card, .panel { background: white; border: 1px solid #c9d9de; border-radius: 8px; padding: 18px; }.card h2 { font-size: 1.18rem; margin: 0 0 8px; }.card p { margin: 8px 0; }
+.price { font: 700 1.1rem Arial, sans-serif; color: #047857; }.status { padding: 12px; background: #e6f4f1; border-left: 4px solid #159b88; }.error { background: #fff0f0; border-left-color: #c2413b; }
+button { background: #087d91; color: white; border: 0; border-radius: 5px; padding: 10px 14px; font-weight: 700; cursor: pointer; } button:hover { background: #066878; }
+input, textarea, select { width: 100%; padding: 10px; border: 1px solid #aabdc5; border-radius: 4px; font: inherit; } label { display: block; margin: 12px 0; font-weight: 700; }.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }.actions > * { flex: 1; min-width: 150px; }
+.product-link { text-decoration: none; }.product-link:hover { border-color: #087d91; }.muted { color: #617487; }
+@media (max-width: 620px) { .topbar { display: block; }.nav { margin-top: 12px; }.page { padding: 28px 16px; } }

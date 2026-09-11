@@ -1,0 +1,174 @@
+openapi: 3.0.3
+info:
+  title: Summit Food Marketplace BFF API
+  version: 1.0.0
+  description: Frontend-facing API. Product approval is owned by Product Service.
+servers:
+  - url: http://localhost:8080
+security:
+  - bearerAuth: []
+paths:
+  /api/v1/products:
+    get:
+      security: []
+      summary: List approved and active products
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: minimum_price
+          schema: { type: number, minimum: 0 }
+        - in: query
+          name: maximum_price
+          schema: { type: number, minimum: 0 }
+        - in: query
+          name: in_stock
+          schema: { type: boolean, default: false }
+      responses:
+        '200': { description: Customer-visible product list }
+    post:
+      summary: Submit a product as a Supplier
+      responses:
+        '201': { description: Product submitted for review }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/products/mine:
+    get:
+      summary: List products owned by the signed-in Supplier
+      responses:
+        '200': { description: Supplier product list }
+  /api/v1/products/review/pending:
+    get:
+      summary: List pending products as a Data Steward
+      responses:
+        '200': { description: Pending product list }
+  /api/v1/products/review/history:
+    get:
+      summary: List approved and rejected products as a Data Steward
+      responses:
+        '200': { description: Historical product review list }
+  /api/v1/products/{productId}:
+    get:
+      security: []
+      summary: Get an approved and active product
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
+      responses:
+        '200': { description: Customer-visible product }
+        '404': { description: Product does not exist or is not customer-visible }
+    patch:
+      summary: Edit a supplier-owned product and resubmit it
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
+      responses:
+        '200': { description: Product is pending review }
+        '403': { $ref: '#/components/responses/Forbidden' }
+    delete:
+      summary: Delete a supplier-owned product
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
+      responses:
+        '204': { description: Product deleted }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/products/{productId}/approve:
+    patch:
+      summary: Approve a product as a Data Steward
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
+      responses:
+        '200': { description: Product approved }
+  /api/v1/products/{productId}/reject:
+    patch:
+      summary: Reject a product with a required reason
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Rejection' }
+      responses:
+        '200': { description: Product rejected }
+        '422': { description: Reason is missing or invalid }
+  /api/v1/users/me:
+    get:
+      summary: Get the signed-in user's application profile
+      responses:
+        '200': { description: User profile }
+    patch:
+      summary: Update the signed-in user's display name
+      responses:
+        '200': { description: User profile updated }
+  /api/v1/cart:
+    get:
+      summary: Get or create the signed-in Customer's active cart
+      responses:
+        '200': { description: Active cart }
+  /api/v1/cart/items:
+    put:
+      summary: Add or update a cart item quantity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CartItemRequest' }
+      responses:
+        '200': { description: Cart updated }
+        '422': { description: Quantity exceeds available stock }
+  /api/v1/cart/items/{productId}:
+    delete:
+      summary: Remove an item from the signed-in Customer's cart
+      parameters: [ { $ref: '#/components/parameters/ProductId' } ]
+      responses:
+        '204': { description: Cart item removed }
+  /api/v1/auth/exchange:
+    post:
+      security: []
+      summary: Exchange a Cognito authorization code and create an HTTP-only BFF session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AuthorizationCodeExchange' }
+      responses:
+        '200': { description: Session created; access token is held only in an HTTP-only cookie }
+        '401': { description: Cognito rejected the authorization code }
+  /api/v1/auth/logout:
+    post:
+      security: []
+      summary: Clear the BFF session cookie
+      responses:
+        '204': { description: Session cleared }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    ProductId:
+      name: productId
+      in: path
+      required: true
+      schema: { type: integer, minimum: 1 }
+  responses:
+    Unauthorized: { description: Missing, invalid, or expired Cognito access token }
+    Forbidden: { description: Cognito group does not allow this action }
+  schemas:
+    Rejection:
+      type: object
+      required: [reason]
+      properties:
+        reason: { type: string, minLength: 3, maxLength: 500 }
+    CartItemRequest:
+      type: object
+      required: [product_id, quantity]
+      properties:
+        product_id: { type: integer, minimum: 1 }
+        quantity: { type: integer, minimum: 1 }
+    AuthorizationCodeExchange:
+      type: object
+      required: [code, codeVerifier, redirectUri]
+      properties:
+        code: { type: string }
+        codeVerifier: { type: string }
+        redirectUri: { type: string, format: uri }

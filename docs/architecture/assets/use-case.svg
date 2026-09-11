@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620">
+  <style>text{font-family:Arial,sans-serif;fill:#102a43}.title{font-size:30px;font-weight:700}.actor{fill:#e6fffa;stroke:#0f766e;stroke-width:2}.case{fill:#fff;stroke:#2563eb;stroke-width:2}.label{font-size:18px;font-weight:700}.small{font-size:15px}.line{stroke:#486581;stroke-width:2;marker-end:url(#arrow)}</style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#486581"/></marker></defs>
+  <rect width="1200" height="620" fill="#f8fbff"/><text x="60" y="62" class="title">Summit Food Marketplace: Use Case Diagram</text>
+  <rect x="50" y="145" width="200" height="72" rx="8" class="actor"/><text x="150" y="188" text-anchor="middle" class="label">Customer</text>
+  <rect x="50" y="284" width="200" height="72" rx="8" class="actor"/><text x="150" y="327" text-anchor="middle" class="label">Supplier</text>
+  <rect x="50" y="424" width="200" height="72" rx="8" class="actor"/><text x="150" y="467" text-anchor="middle" class="label">Data Steward</text>
+  <rect x="365" y="105" width="320" height="105" rx="8" class="case"/><text x="525" y="147" text-anchor="middle" class="label">Discover approved products</text><text x="525" y="177" text-anchor="middle" class="small">Browse categories, search, view details</text>
+  <rect x="365" y="240" width="320" height="105" rx="8" class="case"/><text x="525" y="282" text-anchor="middle" class="label">Manage one active cart</text><text x="525" y="312" text-anchor="middle" class="small">Add, update quantity, remove item</text>
+  <rect x="780" y="240" width="320" height="105" rx="8" class="case"/><text x="940" y="282" text-anchor="middle" class="label">Manage own submissions</text><text x="940" y="312" text-anchor="middle" class="small">Create, update, resubmit, deactivate</text>
+  <rect x="780" y="405" width="320" height="105" rx="8" class="case"/><text x="940" y="447" text-anchor="middle" class="label">Review submissions</text><text x="940" y="477" text-anchor="middle" class="small">Approve or reject with reason and audit trail</text>
+  <line x1="250" y1="181" x2="365" y2="158" class="line"/><line x1="250" y1="190" x2="365" y2="278" class="line"/><line x1="250" y1="320" x2="780" y2="292" class="line"/><line x1="250" y1="460" x2="780" y2="457" class="line"/><line x1="940" y1="405" x2="940" y2="345" class="line"/>
+  <text x="60" y="580" class="small">Only approved, active products are visible to customers. Privileged actions are authorized by Cognito group claims.</text>
+</svg>

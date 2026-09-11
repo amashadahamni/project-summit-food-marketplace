@@ -1,19 +1,11 @@
-// AWS Cognito configuration — fill in your real values from the AWS Console
+ï»¿// Copy this file's values from your Cognito User Pool app client settings.
 window.AUTH_CONFIG = {
-  // e.g. "us-east-1"
-  region: "us-east-1",
-
-  // Your Cognito Hosted UI domain (no https://)
-  // e.g. "summit-marketplace.auth.us-east-1.amazoncognito.com"
-  userPoolDomain: "YOUR_COGNITO_DOMAIN",
-
-  // App client ID (from Cognito > App clients)
-  clientId: "YOUR_CLIENT_ID",
-
-  // Where Cognito sends the user back after login
-  // For local dev keep this; set to your deployed URL in production
-  redirectUri: "http://localhost:3000/",
-
-  // OAuth scopes
-  scope: "openid profile email"
+  cognito: {
+    domain: "eu-north-1dhrx3bgdc.auth.eu-north-1.amazoncognito.com",
+    clientId: "4d5r9b0asqd44np6tchhkhrlv3",
+    loginRedirectUri: "http://127.0.0.1:3000/frontend/login/login.html",
+    signupRedirectUri: "http://127.0.0.1:3000/frontend/signup/signup.html",
+    logoutUri: "http://127.0.0.1:3000/",
+    scope: "openid profile email"
+  }
 };

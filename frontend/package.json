@@ -1,0 +1,29 @@
+{
+  "name": "summit-marketplace-shell",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "lint": "eslint src customer-app/src supplier-app/src datasteward-app/src cypress",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-redux": "^8.1.0",
+    "redux": "^5.0.1",
+    "single-spa": "^5.9.5",
+    "vite": "^6.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "cypress": "^13.15.2",
+    "eslint": "^9.19.0",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0"
+  }
+}

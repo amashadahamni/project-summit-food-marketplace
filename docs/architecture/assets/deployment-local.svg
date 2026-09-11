@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="700" viewBox="0 0 1300 700">
+  <style>text{font-family:Arial,sans-serif;fill:#102a43}.title{font-size:30px;font-weight:700}.boundary{fill:#f0f9ff;stroke:#0284c7;stroke-width:3}.box{fill:#fff;stroke:#2563eb;stroke-width:2}.identity{fill:#fff7ed;stroke:#c2410c;stroke-width:2}.data{fill:#ecfdf5;stroke:#047857;stroke-width:2}.label{font-size:17px;font-weight:700}.small{font-size:13px}.line{stroke:#486581;stroke-width:2;marker-end:url(#arrow)}</style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#486581"/></marker></defs>
+  <rect width="1300" height="700" fill="#f8fbff"/><text x="55" y="55" class="title">Summit Food Marketplace: Local Deployment Architecture</text>
+  <rect x="50" y="135" width="175" height="75" rx="8" class="box"/><text x="138" y="179" text-anchor="middle" class="label">Browser</text><text x="138" y="199" text-anchor="middle" class="small">localhost:3000</text>
+  <rect x="50" y="290" width="175" height="75" rx="8" class="identity"/><text x="138" y="334" text-anchor="middle" class="label">Cognito Hosted UI</text>
+  <rect x="290" y="95" width="950" height="530" rx="12" class="boundary"/><text x="325" y="135" class="label">Docker Compose / Docker Desktop</text>
+  <rect x="350" y="185" width="165" height="75" rx="8" class="box"/><text x="433" y="228" text-anchor="middle" class="label">Site</text><text x="433" y="248" text-anchor="middle" class="small">port 3000</text>
+  <rect x="600" y="185" width="165" height="75" rx="8" class="box"/><text x="683" y="228" text-anchor="middle" class="label">Node.js BFF</text><text x="683" y="248" text-anchor="middle" class="small">port 8080</text>
+  <rect x="845" y="165" width="165" height="75" rx="8" class="box"/><text x="928" y="208" text-anchor="middle" class="label">User Service</text><text x="928" y="228" text-anchor="middle" class="small">port 8000</text>
+  <rect x="845" y="285" width="165" height="75" rx="8" class="box"/><text x="928" y="328" text-anchor="middle" class="label">Product Service</text><text x="928" y="348" text-anchor="middle" class="small">port 8001</text>
+  <rect x="845" y="405" width="165" height="75" rx="8" class="box"/><text x="928" y="448" text-anchor="middle" class="label">Cart Service</text><text x="928" y="468" text-anchor="middle" class="small">port 8002</text>
+  <rect x="600" y="430" width="165" height="75" rx="8" class="box"/><text x="683" y="473" text-anchor="middle" class="label">Demand Risk MVP</text><text x="683" y="493" text-anchor="middle" class="small">port 8004</text>
+  <rect x="1070" y="285" width="125" height="75" rx="8" class="data"/><text x="1133" y="328" text-anchor="middle" class="label">PostgreSQL</text><text x="1133" y="348" text-anchor="middle" class="small">port 5432</text>
+  <line x1="225" y1="172" x2="350" y2="218" class="line"/><line x1="138" y1="210" x2="138" y2="290" class="line"/><line x1="515" y1="222" x2="600" y2="222" class="line"/><line x1="765" y1="220" x2="845" y2="202" class="line"/><line x1="765" y1="225" x2="845" y2="322" class="line"/><line x1="765" y1="230" x2="845" y2="442" class="line"/><line x1="1010" y1="322" x2="1070" y2="322" class="line"/>
+  <text x="50" y="670" class="small">AWS deployment is not yet evidenced. This export documents the verified local Compose deployment only.</text>
+</svg>

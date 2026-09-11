@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>Products | Summit Food Marketplace</title>
+	<link rel="stylesheet" href="productStyles.css">
+	<link rel="stylesheet" href="productFilters.css">
+	<link rel="stylesheet" href="productImages.css">
+</head>
+<body>
+	<header class="site-header">
+		<a class="brand" href="../home/home.html">Summit <span>Food Marketplace</span></a>
+		<nav>
+			<a href="../home/home.html">Home</a>
+			<a aria-current="page" href="products.html">Products</a>
+			<a href="cart.html">Cart</a>
+			<a href="../service/account.html">Account</a>
+		</nav>
+		<div class="auth-actions">
+			<a id="loginLink" href="../../frontend/login/login.html" hidden>Log in</a>
+			<button id="signOutBtn" class="text-button" type="button" hidden>Log out</button>
+		</div>
+	</header>
+	<main>
+		<section class="page-title">
+			<p class="eyebrow">The market</p>
+			<h1>All Products</h1>
+		</section>
+		<form id="searchForm" class="toolbar">
+			<label class="search-field">Search products<input id="search" type="search" placeholder="Chicken, apples, chocolate..."></label>
+			<label>Category<select id="category"><option value="">All categories</option></select></label>
+			<label>Min price<input id="minimumPrice" type="number" min="0" step="0.01" placeholder="0.00"></label>
+			<label>Max price<input id="maximumPrice" type="number" min="0" step="0.01" placeholder="Any"></label>
+			<label class="stock-filter"><input id="inStock" type="checkbox"> In stock only</label>
+			<button class="button" type="submit">Apply filters</button>
+			<button id="clearFilters" class="text-button" type="button">Clear</button>
+		</form>
+		<p id="productStatus" class="status">Loading products...</p>
+		<section id="productList" class="product-grid" aria-live="polite"></section>
+	</main>
+	<script src="../../js/auth-config.js"></script>
+	<script src="../../js/cognito-auth.js"></script>
+	<script src="productImages.js"></script>
+	<script src="productPage.js"></script>
+</body>
+</html>

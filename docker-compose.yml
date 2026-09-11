@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15
@@ -11,46 +9,118 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U summit_user -d summit_food"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   product-service:
-    build: ./services/product-service
+    build: ./backend/product-service
     environment:
       DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
+      COGNITO_REGION: eu-north-1
+      COGNITO_USER_POOL_ID: eu-north-1_dHRX3BGdc
+      COGNITO_CLIENT_ID: 4d5r9b0asqd44np6tchhkhrlv3
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "8001:8001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-service:
+    build: ./backend/user-service
+    environment:
+      DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
+      COGNITO_REGION: eu-north-1
+      COGNITO_USER_POOL_ID: eu-north-1_dHRX3BGdc
+      COGNITO_CLIENT_ID: 4d5r9b0asqd44np6tchhkhrlv3
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   cart-service:
-    build: ./services/cart-service
+    build: ./backend/cart-service
     environment:
       DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
+      PRODUCT_SERVICE_URL: http://product-service:8001
+      COGNITO_REGION: eu-north-1
+      COGNITO_USER_POOL_ID: eu-north-1_dHRX3BGdc
+      COGNITO_CLIENT_ID: 4d5r9b0asqd44np6tchhkhrlv3
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     ports:
       - "8002:8002"
-
-  approval-service:
-    build: ./services/approval-service
-    environment:
-      DATABASE_URL: postgres://summit_user:summit_pass@postgres:5432/summit_food
-    depends_on:
-      - postgres
-    ports:
-      - "8003:8003"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8002/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   bff:
     build: ./bff
+    env_file:
+      - ./bff/.env
     environment:
+      USER_SERVICE_URL: http://user-service:8000
       PRODUCT_SERVICE_URL: http://product-service:8001
       CART_SERVICE_URL: http://cart-service:8002
-      APPROVAL_SERVICE_URL: http://approval-service:8003
+      FRONTEND_ORIGIN: http://localhost:3000,http://127.0.0.1:3000
     depends_on:
-      - product-service
-      - cart-service
-      - approval-service
+      user-service:
+        condition: service_healthy
+      product-service:
+        condition: service_healthy
+      cart-service:
+        condition: service_healthy
     ports:
       - "8080:8080"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:8080/health').then(response => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  site:
+    build:
+      context: ./frontend
+      dockerfile: site/Dockerfile
+    environment:
+      PORT: 3000
+      BFF_URL: http://bff:8080
+    depends_on:
+      bff:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/').then(response => process.exit(response.ok || response.status === 302 ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  demand-risk-service:
+    build: ./4ir-mvp/demand-risk-service
+    ports:
+      - "8004:8004"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8004/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:

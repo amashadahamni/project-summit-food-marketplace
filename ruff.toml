@@ -1,0 +1,6 @@
+target-version = "py312"
+line-length = 240
+extend-exclude = ["alembic"]
+
+[lint]
+select = ["E", "F"]

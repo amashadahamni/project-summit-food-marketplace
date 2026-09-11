@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Use Case Diagram - Project Summit</title>
+  <style>
+    :root{--navy:#123b61;--blue:#1688c3;--teal:#18b5a4;--purple:#6652b8;--ink:#17324d;--muted:#617487;--line:#b8cad8}
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;background:linear-gradient(180deg,#edf7fb,#f8fbfd 48%,#eef5f8);color:var(--ink);font-family:Georgia,"Times New Roman",serif}.page{max-width:1500px;margin:0 auto;padding:24px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 22px;background:var(--navy);color:#fff;border-radius:14px;box-shadow:0 12px 30px #123b6124}.brand{font:700 1.05rem Arial,sans-serif;letter-spacing:.03em}.topbar a{color:#fff;text-decoration:none;font:600 .9rem Arial,sans-serif;padding:10px 14px;border:1px solid #ffffff55;border-radius:8px}.intro{padding:34px 8px 22px}h1{margin:0 0 10px;font-size:clamp(2rem,4vw,3.5rem);color:var(--navy)}.intro p{max-width:900px;margin:0;color:var(--muted);font-size:1.1rem;line-height:1.6}.diagram-wrap{overflow:auto;background:#fff;border:1px solid #d5e1e8;border-radius:14px;padding:18px;box-shadow:0 18px 45px #123b6114}svg{display:block;min-width:1180px;width:100%;height:auto}.boundary{fill:#fbfdfe;stroke:var(--navy);stroke-width:3}.boundary-label{fill:var(--navy);font:700 22px Arial,sans-serif}.actor{fill:var(--ink);font:700 18px Arial,sans-serif;text-anchor:middle}.stick{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round}.usecase{fill:#fff;stroke:var(--line);stroke-width:2}.customer{stroke:var(--blue)}.supplier{stroke:var(--teal)}.steward{stroke:var(--purple)}.shared{stroke:#d49117}.label{fill:var(--ink);font:15px Arial,sans-serif;text-anchor:middle}.association{stroke:#71879a;stroke-width:1.7;fill:none}.include{stroke:#71879a;stroke-width:1.5;stroke-dasharray:7 5;fill:none;marker-end:url(#arrow)}.include-label{fill:#607487;font:italic 12px Arial,sans-serif}.note{fill:#fffdf0;stroke:#d9b74e;stroke-width:1.5}.note-text{fill:#5f531e;font:13px Arial,sans-serif}.legend{display:flex;flex-wrap:wrap;gap:18px;margin:18px 4px 0;color:var(--muted);font:13px Arial,sans-serif}.legend span{display:inline-flex;align-items:center;gap:7px}.legend i{display:inline-block;width:28px;border-top:2px solid #71879a}.legend i.dashed{border-top-style:dashed}.legend i.note-key{width:18px;height:14px;border:1px solid #d9b74e;background:#fffdf0}@media(max-width:700px){.page{padding:12px}.topbar{align-items:flex-start;flex-direction:column}.intro{padding-top:24px}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar"><div class="brand">PROJECT SUMMIT | FOOD MARKETPLACE</div><a href="index.html">Back to home</a></header>
+    <section class="intro"><h1>Use Case Diagram</h1><p>Assessment artefact for the architecture development gate. The diagram captures the customer, supplier and data steward journeys and the business constraints that govern them.</p></section>
+    <section class="diagram-wrap" aria-label="Project Summit Food Marketplace UML use case diagram">
+      <svg viewBox="0 0 1420 1190" role="img" aria-labelledby="diagram-title diagram-desc">
+        <title id="diagram-title">Project Summit Food Marketplace Use Case Diagram</title><desc id="diagram-desc">Customer, Supplier and Data Steward actors interact with the Food Marketplace system boundary.</desc>
+        <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8" fill="none" stroke="#71879a" stroke-width="1.2"/></marker></defs>
+        <rect class="boundary" x="235" y="45" width="970" height="1080" rx="8"/><text class="boundary-label" x="270" y="82">Project Summit Food Marketplace</text>
+        <g transform="translate(95 195)"><circle class="stick" r="19"/><path class="stick" d="M0 19v62M-34 45h68M0 81l-28 45M0 81l28 45"/><text class="actor" y="158">Customer</text></g>
+        <g transform="translate(1315 195)"><circle class="stick" r="19"/><path class="stick" d="M0 19v62M-34 45h68M0 81l-28 45M0 81l28 45"/><text class="actor" y="158">Supplier</text></g>
+        <g transform="translate(1315 790)"><circle class="stick" r="19"/><path class="stick" d="M0 19v62M-34 45h68M0 81l-28 45M0 81l28 45"/><text class="actor" y="158">Data Steward</text></g>
+        <g class="association"><path d="M115 195L300 145M115 215L300 265M115 235L300 385M115 255L300 505M115 275L300 625M115 295L300 745M115 315L300 865M115 335L300 985"/><path d="M1295 195L1110 145M1295 215L1110 265M1295 235L1110 385M1295 255L1110 505M1295 275L1110 625M1295 295L1110 745M1295 315L1110 865M1295 790L1110 805M1295 810L1110 925M1295 830L1110 1045M1295 850L830 445"/></g>
+        <g>
+          <ellipse class="usecase customer" cx="405" cy="145" rx="105" ry="31"/><text class="label" x="405" y="140"><tspan x="405">Browse food</tspan><tspan x="405" dy="18">categories</tspan></text>
+          <ellipse class="usecase customer" cx="405" cy="265" rx="105" ry="31"/><text class="label" x="405" y="260"><tspan x="405">Search products</tspan><tspan x="405" dy="18">by name</tspan></text>
+          <ellipse class="usecase customer" cx="405" cy="385" rx="105" ry="31"/><text class="label" x="405" y="380"><tspan x="405">Filter by</tspan><tspan x="405" dy="18">category</tspan></text>
+          <ellipse class="usecase customer" cx="405" cy="505" rx="105" ry="31"/><text class="label" x="405" y="500"><tspan x="405">View product</tspan><tspan x="405" dy="18">details</tspan></text>
+          <ellipse class="usecase customer" cx="405" cy="625" rx="105" ry="31"/><text class="label" x="405" y="620"><tspan x="405">Add product to</tspan><tspan x="405" dy="18">active cart</tspan></text>
+          <ellipse class="usecase customer" cx="405" cy="745" rx="105" ry="31"/><text class="label" x="405" y="740"><tspan x="405">View active</tspan><tspan x="405" dy="18">cart</tspan></text>
+          <ellipse class="usecase customer" cx="405" cy="865" rx="105" ry="31"/><text class="label" x="405" y="860"><tspan x="405">Update quantity</tspan><tspan x="405" dy="18">or remove item</tspan></text>
+          <ellipse class="usecase shared" cx="405" cy="985" rx="105" ry="31"/><text class="label" x="405" y="980"><tspan x="405">Sign in and</tspan><tspan x="405" dy="18">sign out</tspan></text>
+        </g>
+        <g>
+          <ellipse class="usecase supplier" cx="1035" cy="145" rx="105" ry="31"/><text class="label" x="1035" y="140"><tspan x="1035">Create product</tspan><tspan x="1035" dy="18">submission</tspan></text>
+          <ellipse class="usecase supplier" cx="1035" cy="265" rx="105" ry="31"/><text class="label" x="1035" y="260"><tspan x="1035">View own products</tspan><tspan x="1035" dy="18">and status</tspan></text>
+          <ellipse class="usecase supplier" cx="1035" cy="385" rx="105" ry="31"/><text class="label" x="1035" y="380"><tspan x="1035">Update price, stock</tspan><tspan x="1035" dy="18">and description</tspan></text>
+          <ellipse class="usecase supplier" cx="1035" cy="505" rx="105" ry="31"/><text class="label" x="1035" y="500"><tspan x="1035">Deactivate own</tspan><tspan x="1035" dy="18">product</tspan></text>
+          <ellipse class="usecase supplier" cx="1035" cy="625" rx="105" ry="31"/><text class="label" x="1035" y="620"><tspan x="1035">Correct rejected</tspan><tspan x="1035" dy="18">submission</tspan></text>
+          <ellipse class="usecase supplier" cx="1035" cy="745" rx="105" ry="31"/><text class="label" x="1035" y="740"><tspan x="1035">Resubmit and view</tspan><tspan x="1035" dy="18">rejection reason</tspan></text>
+          <ellipse class="usecase shared" cx="1035" cy="865" rx="105" ry="31"/><text class="label" x="1035" y="860"><tspan x="1035">Validate ownership</tspan><tspan x="1035" dy="18">and authorization</tspan></text>
+          <ellipse class="usecase shared" cx="1035" cy="985" rx="105" ry="31"/><text class="label" x="1035" y="980"><tspan x="1035">Sign in and</tspan><tspan x="1035" dy="18">sign out</tspan></text>
+        </g>
+        <g>
+          <ellipse class="usecase steward" cx="725" cy="805" rx="105" ry="31"/><text class="label" x="725" y="800"><tspan x="725">Review pending and</tspan><tspan x="725" dy="18">historical submissions</tspan></text>
+          <ellipse class="usecase steward" cx="725" cy="925" rx="105" ry="31"/><text class="label" x="725" y="920"><tspan x="725">Approve submission</tspan><tspan x="725" dy="18">and publish product</tspan></text>
+          <ellipse class="usecase steward" cx="725" cy="1045" rx="105" ry="31"/><text class="label" x="725" y="1040"><tspan x="725">Reject submission</tspan><tspan x="725" dy="18">with reason</tspan></text>
+          <ellipse class="usecase shared" cx="725" cy="685" rx="105" ry="31"/><text class="label" x="725" y="680"><tspan x="725">Record approval and</tspan><tspan x="725" dy="18">administrative action</tspan></text>
+          <ellipse class="usecase shared" cx="725" cy="565" rx="105" ry="31"/><text class="label" x="725" y="560"><tspan x="725">Validate stock and</tspan><tspan x="725" dy="18">positive quantity</tspan></text>
+          <ellipse class="usecase shared" cx="725" cy="445" rx="105" ry="31"/><text class="label" x="725" y="440"><tspan x="725">Sign in and</tspan><tspan x="725" dy="18">sign out</tspan></text>
+        </g>
+        <g class="include"><path d="M480 625L620 565M510 925L620 685M510 1045L620 685M930 625L840 565M930 745L840 625"/></g><g class="include-label"><text x="515" y="585">&lt;&lt;include&gt;&gt;</text><text x="520" y="785">&lt;&lt;include&gt;&gt;</text><text x="850" y="590">&lt;&lt;include&gt;&gt;</text></g>
+        <g><rect class="note" x="275" y="1060" width="360" height="48" rx="4"/><text class="note-text" x="287" y="1080">Customer visibility: only approved and</text><text class="note-text" x="287" y="1097">active products appear in results.</text><path class="association" d="M405 1016L405 1060"/><rect class="note" x="795" y="315" width="360" height="48" rx="4"/><text class="note-text" x="807" y="335">Rejection requires a reason and allows</text><text class="note-text" x="807" y="352">correction and resubmission.</text><path class="association" d="M1035 656L1035 363"/><rect class="note" x="485" y="395" width="360" height="48" rx="4"/><text class="note-text" x="497" y="415">One customer can have only one active cart.</text><text class="note-text" x="497" y="432">Unauthorized actions return safe errors.</text><path class="association" d="M510 745L595 443"/></g>
+      </svg>
+      <div class="legend"><span><i></i> Association</span><span><i class="dashed"></i> &lt;&lt;include&gt;&gt;</span><span><i class="note-key"></i> Business rule constraint</span><span>Blue: Customer | Teal: Supplier | Purple: Data Steward</span></div>
+    </section>
+  </main>
+</body>
+</html>

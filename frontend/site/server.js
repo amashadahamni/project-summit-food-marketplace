@@ -2,8 +2,9 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const port = 3000;
-const siteRoot = path.join(__dirname);
+const port = Number(process.env.PORT || 3000);
+const siteRoot = path.join(__dirname, '..', 'dist');
+const bffUrl = new URL(process.env.BFF_URL || 'http://localhost:8080');
 
 const mimeTypes = {
   '.html': 'text/html',
@@ -15,13 +16,40 @@ const mimeTypes = {
 };
 
 const server = http.createServer((req, res) => {
-  let filePath = req.url.split('?')[0];
-  if (filePath === '/' || filePath === '') {
-    filePath = '/index.html';
+  if (req.url.startsWith('/api/')) {
+    const proxyRequest = http.request({
+      hostname: bffUrl.hostname,
+      port: bffUrl.port || 80,
+      path: req.url,
+      method: req.method,
+      headers: { ...req.headers, host: bffUrl.host }
+    }, (proxyResponse) => {
+      res.writeHead(proxyResponse.statusCode, proxyResponse.headers);
+      proxyResponse.pipe(res);
+    });
+    proxyRequest.on('error', () => {
+      res.writeHead(503, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'The marketplace service is unavailable.' }));
+    });
+    req.pipe(proxyRequest);
+    return;
   }
+
+  let filePath = req.url.split('?')[0];
+  if (filePath === '/' || filePath === '') filePath = '/index.html';
   const fullPath = path.join(siteRoot, decodeURIComponent(filePath));
   fs.readFile(fullPath, (err, content) => {
     if (err) {
+      if (!path.extname(filePath)) {
+        return fs.readFile(path.join(siteRoot, 'index.html'), (indexError, indexContent) => {
+          if (indexError) {
+            res.writeHead(500, { 'Content-Type': 'text/plain' });
+            return res.end('Application shell unavailable');
+          }
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end(indexContent);
+        });
+      }
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       return res.end('Not found');
     }
