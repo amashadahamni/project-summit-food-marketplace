@@ -100,6 +100,7 @@ services:
       dockerfile: site/Dockerfile
     environment:
       PORT: 3000
+      BFF_URL: http://bff:8080
     depends_on:
       bff:
         condition: service_healthy

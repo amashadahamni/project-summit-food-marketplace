@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { legacy_createStore as createStore } from "redux";
 
-const api = `${window.location.protocol}//${window.location.hostname}:8080/api/v1`;
+const api = "/api/v1";
 const initialState = { products: [], status: "Loading products...", search: "", category: "", selected: null, cart: null };
 const store = createStore((state = initialState, action) => action.type === "set" ? { ...state, ...action.payload } : state, initialState);
 let root;
@@ -20,14 +20,14 @@ function CustomerApp() {
     if (search) parameters.set("search", search);
     if (category) parameters.set("category", category);
     const response = await fetch(`${api}/products?${parameters}`);
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
     dispatch({ type: "set", payload: response.ok ? { products: data, status: data.length ? "" : "No products found." } : { status: data.error || "Products are unavailable." } });
   };
 
   useEffect(() => { loadProducts().catch(() => dispatch({ type: "set", payload: { status: "Products are unavailable." } })); }, [search, category]);
   const loadCart = async () => {
     const response = await fetch(`${api}/cart`, { credentials: "include" });
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
     if (!response.ok) return setCartMessage("Sign in as a Customer to manage your cart.");
     dispatch({ type: "set", payload: { cart: data } });
     setCartMessage(data.items.length ? "" : "Your cart is empty.");
@@ -35,14 +35,15 @@ function CustomerApp() {
   const addToCart = async (product) => {
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > product.stock) return setCartMessage(`Choose a quantity from 1 to ${product.stock}.`);
     const response = await fetch(`${api}/cart/items`, { method: "PUT", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product_id: product.id, quantity }) });
-    setCartMessage(response.ok ? `${product.name} was added to your cart.` : "Sign in as a Customer to add products to your cart.");
+    const data = await response.json().catch(() => ({}));
+    setCartMessage(response.ok ? `${product.name} was added to your cart.` : data.error || "Sign in as a Customer to add products to your cart.");
     if (response.ok) loadCart();
   };
   const updateCartItem = async (item, nextQuantity) => {
     const quantityValue = Number(nextQuantity);
     if (!Number.isInteger(quantityValue) || quantityValue < 1) return;
     const response = await fetch(`${api}/cart/items`, { method: "PUT", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ product_id: item.product_id, quantity: quantityValue }) });
-    if (!response.ok) return setCartMessage((await response.json()).error || "Cart update failed.");
+    if (!response.ok) return setCartMessage((await response.json().catch(() => ({}))).error || "Cart update failed.");
     loadCart();
   };
   const removeCartItem = async (productId) => {
