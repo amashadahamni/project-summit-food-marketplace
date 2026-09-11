@@ -48,7 +48,7 @@ describe("Summit marketplace demo journeys", () => {
       cart = { items: [{ product_id: 101, quantity: request.body.quantity }] };
       request.reply(cart);
     }).as("saveCart");
-    cy.intercept("GET", "http://localhost:8080/api/v1/cart", (request) => request.reply({ body: cart })).as("loadCart");
+    cy.intercept("GET", "**/api/v1/cart", (request) => request.reply({ body: cart })).as("loadCart");
     cy.intercept("DELETE", "**/api/v1/cart/items/101", (request) => {
       cart = { items: [] };
       request.reply(204);
@@ -66,6 +66,7 @@ describe("Summit marketplace demo journeys", () => {
   });
 
   it("4. lets a supplier submit a new product for review", () => {
+    cy.intercept("GET", "**/api/v1/auth/me", { username: "supplier", roles: ["Supplier"] });
     cy.intercept("POST", "**/api/v1/products", (request) => {
       expect(request.body).to.include({ name: "Fresh Kale", category: "Vegetables", stock: 20 });
       request.reply({ ...request.body, id: 303, status: "pending" });
@@ -84,6 +85,7 @@ describe("Summit marketplace demo journeys", () => {
   });
 
   it("5. lets a supplier edit and deactivate an owned listing", () => {
+    cy.intercept("GET", "**/api/v1/auth/me", { username: "supplier", roles: ["Supplier"] });
     cy.intercept("GET", "**/api/v1/products/mine", [supplierProduct]).as("myProducts");
     cy.intercept("PATCH", "**/api/v1/products/202", (request) => {
       expect(request.body.name).to.equal("Updated Carrots");
@@ -103,6 +105,7 @@ describe("Summit marketplace demo journeys", () => {
 
   it("6. lets a Data Steward approve a submission and view review history", () => {
     const pending = { ...supplierProduct, status: "pending", rejection_reason: null };
+    cy.intercept("GET", "**/api/v1/auth/me", { username: "steward", roles: ["DataSteward"] });
     cy.intercept("GET", "**/api/v1/products/review/pending", [pending]).as("pendingQueue");
     cy.intercept("PATCH", "**/api/v1/products/202/approve", { ...pending, status: "approved" }).as("approveProduct");
     cy.intercept("GET", "**/api/v1/products/review/history", [{ ...pending, status: "approved" }]).as("reviewHistory");
